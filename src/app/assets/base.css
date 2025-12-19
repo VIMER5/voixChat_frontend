@@ -1,0 +1,48 @@
+:root {
+  --с-DeepBlueBlack-darker: #14161a;
+  --с-DeepBlueBlack-lighter: #2a2d33;
+  --c-TurquoiseBlue-main: #37a5b3;
+  --c-TurquoiseBlue-darker: #2a818c;
+  --c-CTA_red: #ed4245;
+  --c-BlueGray-Dark: #1c1c24;
+  --c-BlueGray-Cool: #232429;
+  --с-GrayUndertoneBlue: #b9bbbe;
+  --c-white: #ffffff;
+}
+
+:root {
+  /* --font-primary: "whitney", system-ui, sans-serif; */
+  --fw-light: 300;
+  --fw-book: 350;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+  --fw-bold: 700;
+  --c-icons: var(--с-GrayUndertoneBlue);
+  /* --bc-main: var(--c-BlueGray-Dark); */
+  --text-c-main: var(--c-white);
+}
+@theme {
+  --color-DeepBlueBlack-darker: #14161a;
+  --color-DeepBlueBlack-lighter: #2a2d33;
+  --color-TurquoiseBlue-main: #37a5b3;
+  --color-TurquoiseBlue-darker: #2a818c;
+  --color-CTA_red: #ed4245;
+  --color-BlueGray-Dark: #1c1c24;
+  --color-BlueGray-Cool: #232429;
+  --сolor-GrayUndertoneBlue: #b9bbbe;
+  --color-white: #ffffff;
+  --color-Graphite-anthracite: #292b2f;
+}
+@theme {
+  --color-bc-main: var(--color-BlueGray-Dark);
+  --font-primary: "whitney", system-ui, sans-serif;
+  --color-text-main: var(--c-white);
+  --color-icons-c: var(--сolor-GrayUndertoneBlue);
+}
+body {
+  font-family: var(--font-primary);
+  font-style: normal;
+  font-weight: var(--fw-semibold);
+  background-color: var(--color-bc-main);
+  color: var(--text-c-main);
+}
