@@ -32,6 +32,7 @@
   --сolor-GrayUndertoneBlue: #b9bbbe;
   --color-white: #ffffff;
   --color-Graphite-anthracite: #292b2f;
+  --color-DarkSteelGray: rgb(47, 49, 55, 41%);
 }
 @theme {
   --color-bc-main: var(--color-BlueGray-Dark);

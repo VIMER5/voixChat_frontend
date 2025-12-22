@@ -4,6 +4,10 @@ import co from "@components/notification.vue";
 import userStatus from "@/shared/components/userStatus.vue";
 import userAvatar from "@/shared/components/userAvatar.vue";
 import usernamePlate from "@/shared/components/usernamePlate.vue";
+import buttonIcons from "@/shared/components/buttonIcons.vue";
+import iconDeafen from "@icons/iconDeaf.vue";
+import iconMute from "@icons/iconMute.vue";
+import iconSettings from "@icons/iconSettings.vue";
 
 const url = "https://cdn.discordapp.com/avatars/555259684584554497/30c74f18defc66cc70aff045b8730032.webp?size=100";
 </script>
@@ -31,7 +35,13 @@ const url = "https://cdn.discordapp.com/avatars/555259684584554497/30c74f18defc6
         class="w-[45px]"
       />
     </div>
-    <usernamePlate userStatus="Vue Is My Everyday Routine" userName="-=V.I.M.E.R=-" class="mx-10 max-w-[400px]" />
+    <usernamePlate
+      status="online"
+      :url-user-avatar="url"
+      userStatus="Vue Is My Everyday Routine"
+      userName="-=V.I.M.E.R=-"
+      class="mx-10 max-w-[400px]"
+    />
   </div>
 </template>
 
