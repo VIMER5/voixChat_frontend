@@ -10,7 +10,8 @@
       "@components/*": ["./src/shared/components/*"],
       "@views/*": ["./src/views/*"],
       "@model/*": ["./src/app/model/*"],
-      "@icons/*": ["./src/shared/icon/*"]
+      "@icons/*": ["./src/shared/icon/*"],
+      "@layout/*": ["./src/app/layout/*"]
     }
   }
 }

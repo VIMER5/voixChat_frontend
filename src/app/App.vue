@@ -13,8 +13,8 @@ const url = "https://cdn.discordapp.com/avatars/555259684584554497/30c74f18defc6
 </script>
 
 <template>
-  <!-- <RouterView /> -->
-  <h1 class="font-semibold text-CTA_red not-italic">Hello world!</h1>
+  <RouterView />
+  <!-- <h1 class="font-semibold text-CTA_red not-italic">Hello world!</h1>
   <div class="d flex gap-10 flex-col">
     <co notification-text="12" />
     <div class="dd flex gap-10">
@@ -42,7 +42,7 @@ const url = "https://cdn.discordapp.com/avatars/555259684584554497/30c74f18defc6
       userName="-=V.I.M.E.R=-"
       class="mx-10 max-w-[400px]"
     />
-  </div>
+  </div> -->
 </template>
 
 <style scoped></style>
