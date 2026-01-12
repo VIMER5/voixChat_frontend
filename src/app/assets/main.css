@@ -3,4 +3,5 @@
 @import "./base.css";
 
 #app {
+  height: 100%;
 }

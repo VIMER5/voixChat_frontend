@@ -46,4 +46,5 @@ body {
   font-weight: var(--fw-semibold);
   background-color: var(--color-bc-main);
   color: var(--text-c-main);
+  height: 100dvh;
 }
