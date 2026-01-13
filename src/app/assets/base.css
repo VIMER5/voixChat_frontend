@@ -18,7 +18,6 @@
   --fw-semibold: 600;
   --fw-bold: 700;
   --c-icons: var(--с-GrayUndertoneBlue);
-  /* --bc-main: var(--c-BlueGray-Dark); */
   --text-c-main: var(--c-white);
 }
 @theme {
@@ -33,6 +32,7 @@
   --color-white: #ffffff;
   --color-Graphite-anthracite: #292b2f;
   --color-DarkSteelGray: rgb(47, 49, 55, 41%);
+  --color-Ocean-Teal-53: rgb(10, 177, 199, 53%);
 }
 @theme {
   --color-bc-main: var(--color-BlueGray-Dark);
