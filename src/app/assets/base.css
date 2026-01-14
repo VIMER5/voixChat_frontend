@@ -48,3 +48,6 @@ body {
   color: var(--text-c-main);
   height: 100dvh;
 }
+input {
+  outline: none;
+}

@@ -4,6 +4,7 @@ import glass from "@/shared/components/glass.vue";
 import iconUsers from "@icons/iconUsers.vue";
 import iconDesktop from "@/shared/icon/iconDesktop.vue";
 import iconMobile from "@/shared/icon/iconMobile.vue";
+import logo from "@/shared/icon/logo.vue";
 function startDrag(data: any) {
   isDragging.value = true;
 }
@@ -45,8 +46,11 @@ onUnmounted(() => {
   <div class="max-w-360 m-auto h-full grid grid-cols-2">
     <div class="daw border flex items-end flex-col justify-center">
       <div class="content w-[72.36%] mr-[10%]">
-        <div class="form__panel bg-BlueGray-Dark rounded-[19px] p-8.75">
-          <RouterView />
+        <div class="form__panel bg-BlueGray-Dark rounded-[19px] p-8.75 relative flex flex-col items-center">
+          <div class="mx-auto absolute top-[calc(0px-48px)] w-[37.55%]">
+            <logo class="w-full" />
+          </div>
+          <RouterView class="mt-[19%] w-full" />
         </div>
       </div>
     </div>
