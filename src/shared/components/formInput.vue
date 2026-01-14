@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { defineProps } from "vue";
+import { defineProps, defineModel } from "vue";
 import iconMail from "../icon/iconMail.vue";
 
 const { error = false, placeholder = "NN" } = defineProps<{
   placeholder?: string;
   error?: boolean;
 }>();
+const model = defineModel();
 </script>
 
 <template>
@@ -16,7 +17,12 @@ const { error = false, placeholder = "NN" } = defineProps<{
     <div class="icon w-4.75 aspect-square flex items-center">
       <slot></slot>
     </div>
-    <input type="text" class="text-[1rem] w-full text-[#4C4C52] placeholder-[#4C4C52]" :placeholder="placeholder" />
+    <input
+      v-model="model"
+      type="text"
+      class="text-[1rem] w-full text-[#4C4C52] placeholder-[#4C4C52]"
+      :placeholder="placeholder"
+    />
   </div>
 </template>
 

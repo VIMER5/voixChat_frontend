@@ -44,7 +44,7 @@ onUnmounted(() => {
 
 <template>
   <div class="max-w-360 m-auto h-full grid grid-cols-2">
-    <div class="daw border flex items-end flex-col justify-center">
+    <div class="daw flex items-end flex-col justify-center">
       <div class="content w-[72.36%] mr-[10%]">
         <div class="form__panel bg-BlueGray-Dark rounded-[19px] p-8.75 relative flex flex-col items-center">
           <div class="mx-auto absolute top-[calc(0px-48px)] w-[37.55%]">
@@ -54,7 +54,7 @@ onUnmounted(() => {
         </div>
       </div>
     </div>
-    <div class="sf box-content flex items-center justify-center">
+    <div class="sf box-content flex items-center ml-[20%]">
       <!-- <div class="w-[44%] aspect-square rounded-full blur-[73px] my-auto bg-Ocean-Teal-53 p-6"></div> -->
       <!-- <div class="glass">dadawd</div> -->
       <div class="relative w-[35%] aspect-square">
