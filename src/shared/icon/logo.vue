@@ -7,7 +7,7 @@ const { color = "#fff" } = defineProps<{
 </script>
 
 <template>
-  <svg height="auto" viewBox="0 0 204 184" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <svg viewBox="0 0 204 184" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path
       fill-rule="evenodd"
       clip-rule="evenodd"
