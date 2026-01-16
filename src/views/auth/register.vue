@@ -32,8 +32,12 @@ async function submit() {
     <div class="inputs flex flex-col gap-5">
       <formInput :error="!!errorTest" placeholder="Логин..." v-model="login"><iconLogin /></formInput>
       <formInput :error="!!errorTest" placeholder="Почта..." v-model="mail"><iconMail /></formInput>
-      <formInput :error="!!errorTest" placeholder="Пароль..." v-model="password"><iconPassword /></formInput>
-      <formInput :error="!!errorTest" placeholder="Пароль..." v-model="confirmPassword"><iconPassword /></formInput>
+      <formInput type="password" :error="!!errorTest" placeholder="Пароль..." v-model="password"
+        ><iconPassword
+      /></formInput>
+      <formInput type="password" :error="!!errorTest" placeholder="Пароль..." v-model="confirmPassword"
+        ><iconPassword
+      /></formInput>
     </div>
     <div class="flex justify-between items-center mt-2.5">
       <div class="error text-CTA_red text-[14px]">{{ errorTest }}</div>

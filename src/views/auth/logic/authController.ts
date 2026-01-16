@@ -16,7 +16,7 @@ class authController {
       const t = await $api.post("/auth/login", { login, password });
       value = "ok";
       store.tokenAccess = t.data.access;
-      console.log(t.data);
+      sessionStorage.setItem("access", t.data.access);
     } catch (err) {
       return { error: err instanceof AxiosError ? err.response?.data : "ошибка", value };
     }

@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import authLayout from "@layout/authLayout.vue";
+import { guard } from "./guards";
 
 import HomeView from "@views/HomeView.vue";
 import login from "@/views/auth/login.vue";
@@ -53,5 +54,5 @@ const router = createRouter({
     },
   ],
 });
-
+router.beforeEach(guard);
 export default router;

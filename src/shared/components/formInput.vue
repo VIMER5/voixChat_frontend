@@ -2,9 +2,14 @@
 import { defineProps, defineModel } from "vue";
 import iconMail from "../icon/iconMail.vue";
 
-const { error = false, placeholder = "NN" } = defineProps<{
+const {
+  error = false,
+  placeholder = "NN",
+  type = "text",
+} = defineProps<{
   placeholder?: string;
   error?: boolean;
+  type?: "text" | "password";
 }>();
 const model = defineModel();
 </script>
@@ -19,7 +24,7 @@ const model = defineModel();
     </div>
     <input
       v-model="model"
-      type="text"
+      :type="type"
       class="text-[1rem] w-full text-[#4C4C52] placeholder-[#4C4C52]"
       :placeholder="placeholder"
     />

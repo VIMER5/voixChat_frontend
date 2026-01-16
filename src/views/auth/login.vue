@@ -5,6 +5,8 @@ import iconLogin from "@/shared/icon/iconLogin.vue";
 import iconPassword from "@/shared/icon/iconPassword.vue";
 import buttonAuth from "@/shared/components/buttonAuth.vue";
 import authController from "@views/auth/logic/authController";
+import { useRouter } from "vue-router";
+const router = useRouter();
 const login = ref<string | null>(null);
 const password = ref<string | null>(null);
 const errorTest = ref<string | null>(null);
@@ -15,6 +17,7 @@ async function submit() {
   const { value, error } = await authController.loginIn(login.value, password.value);
   errorTest.value = error;
   isDisabled.value = !!error;
+  if (value) router.push("/");
 }
 </script>
 
@@ -23,7 +26,9 @@ async function submit() {
     <h2 class="text-[2rem] text-[#C0BCBC] font-semibold text-center mb-8.5">Авторизация</h2>
     <div class="inputs flex flex-col gap-5">
       <formInput :error="!!errorTest" placeholder="Логин..." v-model="login"><iconLogin /></formInput>
-      <formInput :error="!!errorTest" placeholder="Пароль..." v-model="password"><iconPassword /></formInput>
+      <formInput type="password" :error="!!errorTest" placeholder="Пароль..." v-model="password"
+        ><iconPassword
+      /></formInput>
     </div>
     <div class="flex justify-between items-center mt-2.5">
       <div class="error text-CTA_red text-[14px]">{{ errorTest }}</div>
