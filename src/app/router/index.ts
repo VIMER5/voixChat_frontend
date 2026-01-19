@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import authLayout from "@layout/authLayout.vue";
+import mainLayout from "@layout/mainLayout.vue";
 import { guard } from "./guards";
 
 import HomeView from "@views/HomeView.vue";
@@ -35,7 +36,7 @@ const router = createRouter({
     {
       path: "/",
       meta: { requiresAuth: true },
-      component: HomeView,
+      component: mainLayout,
       children: [
         {
           path: "",
