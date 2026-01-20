@@ -4,7 +4,7 @@ import userAvatar from "@components/userAvatar.vue";
 import iconDeafen from "@icons/iconDeaf.vue";
 import iconMute from "@icons/iconMute.vue";
 import iconSettings from "@icons/iconSettings.vue";
-import buttonIcons from "@components/buttonIcons.vue";
+import buttonIcons from "@/shared/components/ui/buttons/buttonIcons.vue";
 
 defineProps<{
   userName: string;

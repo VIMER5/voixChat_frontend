@@ -4,7 +4,7 @@
   <div class="mainLayout">
     <aside class="sidebar__channels"></aside>
     <aside class="sidebar__chats"></aside>
-    <section class="chats"></section>
+    <section class="chats"><RouterView /></section>
   </div>
 </template>
 

@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ref, watch } from "vue";
-import formInput from "@/shared/components/formInput.vue";
+import formInput from "@/shared/components/ui/inputs/formInput.vue";
 import iconLogin from "@/shared/icon/iconLogin.vue";
 import iconPassword from "@/shared/icon/iconPassword.vue";
-import buttonAuth from "@/shared/components/buttonAuth.vue";
+import buttonAuth from "@/shared/components/ui/buttons/buttonAuth.vue";
 import authController from "@views/auth/logic/authController";
 import { useRouter } from "vue-router";
 const router = useRouter();

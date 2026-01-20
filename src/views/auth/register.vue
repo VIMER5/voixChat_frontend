@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import formInput from "@/shared/components/formInput.vue";
+import formInput from "@/shared/components/ui/inputs/formInput.vue";
 import iconMail from "@/shared/icon/iconMail.vue";
 import iconPassword from "@/shared/icon/iconPassword.vue";
-import buttonAuth from "@/shared/components/buttonAuth.vue";
+import buttonAuth from "@/shared/components/ui/buttons/buttonAuth.vue";
 import iconLogin from "@/shared/icon/iconLogin.vue";
 import authController from "@views/auth/logic/authController";
 import { ref, watch } from "vue";

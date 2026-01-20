@@ -4,7 +4,7 @@ import co from "@components/notification.vue";
 import userStatus from "@/shared/components/userStatus.vue";
 import userAvatar from "@/shared/components/userAvatar.vue";
 import usernamePlate from "@/shared/components/usernamePlate.vue";
-import buttonIcons from "@/shared/components/buttonIcons.vue";
+import buttonIcons from "@/shared/components/ui/buttons/buttonIcons.vue";
 import iconDeafen from "@icons/iconDeaf.vue";
 import iconMute from "@icons/iconMute.vue";
 import iconSettings from "@icons/iconSettings.vue";

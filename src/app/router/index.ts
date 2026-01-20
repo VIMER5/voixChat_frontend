@@ -3,7 +3,7 @@ import authLayout from "@layout/authLayout.vue";
 import mainLayout from "@layout/mainLayout.vue";
 import { guard } from "./guards";
 
-import HomeView from "@views/HomeView.vue";
+import helloView from "@/views/helloView.vue";
 import login from "@/views/auth/login.vue";
 import passwordReset from "@/views/auth/passwordReset.vue";
 import register from "@/views/auth/register.vue";
@@ -40,8 +40,8 @@ const router = createRouter({
       children: [
         {
           path: "",
-          name: "home",
-          component: HomeView,
+          name: "hello",
+          component: helloView,
         },
       ],
     },
