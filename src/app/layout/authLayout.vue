@@ -4,7 +4,7 @@ import glass from "@/shared/components/glass.vue";
 import iconUsers from "@icons/iconUsers.vue";
 import iconDesktop from "@/shared/icon/iconDesktop.vue";
 import iconMobile from "@/shared/icon/iconMobile.vue";
-import logo from "@/shared/icon/logo.vue";
+import logoAuth from "@/shared/icon/logoAuth.vue";
 function startDrag(data: any) {
   isDragging.value = true;
 }
@@ -52,7 +52,7 @@ onUnmounted(() => {
           class="form__panel bg-BlueGray-Dark rounded-[19px] p-6 sm:p-8 lg:p-8.75 relative flex flex-col items-center shadow-lg md:shadow-xl"
         >
           <div class="mx-auto absolute top-[-48px] sm:top-[-56px] w-[120px] sm:w-[160px] md:w-[37.55%] max-w-[180px]">
-            <logo class="w-full" />
+            <logoAuth class="w-full" />
           </div>
           <RouterView class="mt-16 sm:mt-20 md:mt-[19%] w-full px-2 sm:px-0" />
         </div>
@@ -157,6 +157,8 @@ onUnmounted(() => {
   -webkit-backdrop-filter: url(#blackGlass);
 
   background: rgba(0, 0, 0, 0.1);
-  box-shadow: 0 1px 1px rgba(255, 255, 255, 0.1), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+  box-shadow:
+    0 1px 1px rgba(255, 255, 255, 0.1),
+    inset 0 1px 1px rgba(255, 255, 255, 0.1);
 }
 </style>

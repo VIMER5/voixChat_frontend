@@ -43,6 +43,11 @@ const router = createRouter({
           name: "hello",
           component: helloView,
         },
+        {
+          path: "uikit",
+          name: "uikit",
+          component: () => import("@views/uiKit.vue"),
+        },
       ],
     },
     {
