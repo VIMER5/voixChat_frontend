@@ -2,8 +2,16 @@
 import buttonDefoultSidebarChannels from "@/shared/components/ui/buttons/buttonDefoultSidebarChannels.vue";
 import logoIcon from "@/shared/icon/logoIcon.vue";
 import iconAddServer from "@/shared/icon/iconAddServer.vue";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import userAvatar from "@/shared/components/userUI/userAvatar.vue";
+import { useUsersInfo } from "../stores/usersInfo";
+import { useSocketStore } from "@/app/stores/socketStore";
+const store = useUsersInfo();
+store.getCurrentUserInfo();
+onMounted(() => {
+  const socketStore = useSocketStore();
+  socketStore.initSocket(sessionStorage.getItem("access")!);
+});
 const userNtification = ref(["lol"]);
 const url = "https://cdn.discordapp.com/avatars/555259684584554497/30c74f18defc66cc70aff045b8730032.webp?size=100";
 </script>
@@ -15,12 +23,26 @@ const url = "https://cdn.discordapp.com/avatars/555259684584554497/30c74f18defc6
         <buttonDefoultSidebarChannels><logoIcon class="m-[8px]" /></buttonDefoultSidebarChannels>
       </RouterLink>
       <div v-if="userNtification.length > 0" class="user__notification my-[10px]">
-        <userAvatar :img-url="url" user-name="-=V.I.M.E.R=-" type="big" :notification="991" :speak="true"></userAvatar>
+        <userAvatar
+          :img-url="url"
+          user-name="-=V.I.M.E.R=-"
+          status=""
+          type="big"
+          :notification="991"
+          :speak="true"
+        ></userAvatar>
       </div>
 
       <div v-if="userNtification.length > 0" class="servers__gild my-[10px]">
         <hr />
-        <userAvatar :img-url="url" user-name="-=V.I.M.E.R=-" type="big" :notification="991" :speak="true"></userAvatar>
+        <userAvatar
+          :img-url="url"
+          status=""
+          user-name="-=V.I.M.E.R=-"
+          type="big"
+          :notification="991"
+          :speak="true"
+        ></userAvatar>
       </div>
       <div class="sidebar__channels__buttons">
         <hr />

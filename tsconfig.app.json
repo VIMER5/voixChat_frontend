@@ -6,6 +6,7 @@
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
 
     "paths": {
+      "@modalWindows/*": ["./src/shared/modalWindows/*"],
       "@/*": ["./src/*"],
       "@components/*": ["./src/shared/components/*"],
       "@views/*": ["./src/views/*"],

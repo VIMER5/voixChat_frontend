@@ -9,6 +9,7 @@ export default defineConfig({
   plugins: [vue(), vueDevTools(), tailwindcss()],
   resolve: {
     alias: {
+      "@modalWindows": fileURLToPath(new URL("./src/shared/modalWindows", import.meta.url)),
       "@": fileURLToPath(new URL("./src", import.meta.url)),
       "@components": fileURLToPath(new URL("./src/shared/components", import.meta.url)),
       "@views": fileURLToPath(new URL("./src/views", import.meta.url)),
