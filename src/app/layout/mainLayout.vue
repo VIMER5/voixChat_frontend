@@ -2,6 +2,10 @@
 import buttonDefoultSidebarChannels from "@/shared/components/ui/buttons/buttonDefoultSidebarChannels.vue";
 import logoIcon from "@/shared/icon/logoIcon.vue";
 import iconAddServer from "@/shared/icon/iconAddServer.vue";
+import { ref } from "vue";
+import userAvatar from "@/shared/components/userUI/userAvatar.vue";
+const userNtification = ref(["lol"]);
+const url = "https://cdn.discordapp.com/avatars/555259684584554497/30c74f18defc66cc70aff045b8730032.webp?size=100";
 </script>
 
 <template>
@@ -10,11 +14,20 @@ import iconAddServer from "@/shared/icon/iconAddServer.vue";
       <RouterLink to="/">
         <buttonDefoultSidebarChannels><logoIcon class="m-[8px]" /></buttonDefoultSidebarChannels>
       </RouterLink>
-      <RouterLink to="/uikit">
-        <buttonDefoultSidebarChannels class="mt-[10px]"
-          ><iconAddServer class="m-[13px]"
-        /></buttonDefoultSidebarChannels>
-      </RouterLink>
+      <div v-if="userNtification.length > 0" class="user__notification my-[10px]">
+        <userAvatar :img-url="url" user-name="-=V.I.M.E.R=-" type="big" :notification="991" :speak="true"></userAvatar>
+      </div>
+
+      <div v-if="userNtification.length > 0" class="servers__gild my-[10px]">
+        <hr />
+        <userAvatar :img-url="url" user-name="-=V.I.M.E.R=-" type="big" :notification="991" :speak="true"></userAvatar>
+      </div>
+      <div class="sidebar__channels__buttons">
+        <hr />
+        <RouterLink to="/uikit">
+          <buttonDefoultSidebarChannels class=""><iconAddServer class="m-[13px]" /></buttonDefoultSidebarChannels>
+        </RouterLink>
+      </div>
     </aside>
     <aside class="sidebar__chats"></aside>
     <section class="chats"><RouterView /></section>
@@ -31,9 +44,20 @@ import iconAddServer from "@/shared/icon/iconAddServer.vue";
 .sidebar__channels {
   padding: 0 7px;
 }
+.servers__gild {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
 .sidebar__chats {
   background-color: var(--c-BlueGray-Dark);
   border-radius: 8px;
+}
+.sidebar__channels__buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
 }
 .chats {
   background-color: var(--c-BlueGray-Cool);

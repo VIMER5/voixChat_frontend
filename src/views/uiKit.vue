@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import co from "@components/notification.vue";
-import userStatus from "@/shared/components/userStatus.vue";
-import userAvatar from "@/shared/components/userAvatar.vue";
-import usernamePlate from "@/shared/components/usernamePlate.vue";
+import co from "@/shared/components/userUI/notification.vue";
+import userStatus from "@/shared/components/userUI/userStatus.vue";
+import userAvatar from "@/shared/components/userUI/userAvatar.vue";
+import usernamePlate from "@/shared/components/userUI/usernamePlate.vue";
 import buttonIcons from "@/shared/components/ui/buttons/buttonIcons.vue";
 import iconDeafen from "@icons/iconDeaf.vue";
 import iconMute from "@icons/iconMute.vue";

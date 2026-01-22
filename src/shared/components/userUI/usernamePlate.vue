@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { type TypeStatusProps } from "@/app/model/userStatusModel";
-import userAvatar from "@components/userAvatar.vue";
+import userAvatar from "@components/userUI/userAvatar.vue";
 import iconDeafen from "@icons/iconDeaf.vue";
 import iconMute from "@icons/iconMute.vue";
 import iconSettings from "@icons/iconSettings.vue";

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, onUnmounted, onMounted } from "vue";
-import glass from "@/shared/components/glass.vue";
+import glass from "@/shared/components/ui/glass.vue";
 import iconUsers from "@icons/iconUsers.vue";
 import iconDesktop from "@/shared/icon/iconDesktop.vue";
 import iconMobile from "@/shared/icon/iconMobile.vue";
@@ -157,8 +157,6 @@ onUnmounted(() => {
   -webkit-backdrop-filter: url(#blackGlass);
 
   background: rgba(0, 0, 0, 0.1);
-  box-shadow:
-    0 1px 1px rgba(255, 255, 255, 0.1),
-    inset 0 1px 1px rgba(255, 255, 255, 0.1);
+  box-shadow: 0 1px 1px rgba(255, 255, 255, 0.1), inset 0 1px 1px rgba(255, 255, 255, 0.1);
 }
 </style>
