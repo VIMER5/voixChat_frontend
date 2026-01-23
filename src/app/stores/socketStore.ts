@@ -24,10 +24,9 @@ export const useSocketStore = defineStore("SocketStore", () => {
       console.log("Socket connected");
     });
 
-    socket.value.on("test", (data) => {
-      console.log(data);
+    socket.value.on("emailConfirmed", (data) => {
       const user = useUsersInfo();
-      if (user.userInfoCurrent) user.userInfoCurrent.emailConfirmed = true;
+      if (user.userInfoCurrent) user.userInfoCurrent.emailConfirmed = data.body;
     });
 
     socket.value.on("disconnect", () => {

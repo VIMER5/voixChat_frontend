@@ -7,6 +7,7 @@ import helloView from "@/views/helloView.vue";
 import login from "@/views/auth/login.vue";
 import passwordReset from "@/views/auth/passwordReset.vue";
 import register from "@/views/auth/register.vue";
+import verifyEmail from "@/views/auth/verifyEmail.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -47,6 +48,18 @@ const router = createRouter({
           path: "uikit",
           name: "uikit",
           component: () => import("@views/uiKit.vue"),
+        },
+      ],
+    },
+    {
+      path: "/VerifyEmail/:token",
+      meta: { requiresAuth: false },
+      component: authLayout,
+      children: [
+        {
+          path: "",
+          name: "VerifyEmail",
+          component: verifyEmail,
         },
       ],
     },

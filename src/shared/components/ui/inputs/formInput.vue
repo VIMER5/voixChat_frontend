@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { defineProps, defineModel } from "vue";
-import iconMail from "../icon/iconMail.vue";
 
 const {
   error = false,
@@ -32,6 +31,17 @@ const model = defineModel();
 </template>
 
 <style scoped>
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: #4c4c52;
+  background-color: transparent !important;
+  font-family: "whitney" !important;
+  font-weight: 400 !important;
+  font-size: inherit !important;
+}
 .error_border {
   border: 1px solid var(--c-CTA_red);
 }

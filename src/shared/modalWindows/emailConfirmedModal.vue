@@ -21,9 +21,29 @@ function maskEmail(email: string) {
   const visiblePart = localPart.substring(0, 2);
   return visiblePart + "**@" + domain;
 }
-
-function ff() {
-  $api.get("user/ff");
+const time = ref(0);
+const buttonDis = ref(false);
+let timer: any;
+function startTimer() {
+  timer = setInterval(() => {
+    if (time.value >= 1) {
+      time.value--;
+    } else {
+      clearInterval(timer);
+      buttonDis.value = false;
+    }
+  }, 1000);
+}
+const formattedTime = computed(() => {
+  const minutes = Math.floor(time.value / 60);
+  const seconds = time.value % 60;
+  return `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+});
+function send() {
+  time.value = 20;
+  buttonDis.value = true;
+  startTimer();
+  $api.get("/auth/user/sendVerifyEmailURL");
 }
 </script>
 
@@ -36,7 +56,9 @@ function ff() {
         подтверждением на <span>{{ maskEmailStr }}</span>
       </p>
       <h3 class="model-h3">Пройдите по ссылке в письме</h3>
-      <button @click="ff" class="model-button">Отправить повторно</button>
+      <button :disabled="buttonDis" @click="send" class="model-button">
+        Отправить повторно <span v-if="time > 0">{{ formattedTime }}</span>
+      </button>
     </div>
   </div>
 </template>
@@ -81,5 +103,9 @@ function ff() {
   width: max-content;
   margin-top: 40px;
   cursor: pointer;
+}
+button:disabled {
+  cursor: default;
+  background-color: var(--с-SpaceCharcoal_45);
 }
 </style>
