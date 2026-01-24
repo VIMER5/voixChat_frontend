@@ -6,6 +6,7 @@ import { onMounted, ref } from "vue";
 import userAvatar from "@/shared/components/userUI/userAvatar.vue";
 import { useUsersInfo } from "../stores/usersInfo";
 import { useSocketStore } from "@/app/stores/socketStore";
+import sidebarChats from "@/shared/components/userUI/sidebarChats.vue";
 const store = useUsersInfo();
 store.getCurrentUserInfo();
 onMounted(() => {
@@ -51,7 +52,7 @@ const url = "https://cdn.discordapp.com/avatars/555259684584554497/30c74f18defc6
         </RouterLink>
       </div>
     </aside>
-    <aside class="sidebar__chats"></aside>
+    <aside class="sidebar__chats"><sidebarChats class="mt-[100px] ml-[10px]" /></aside>
     <section class="chats"><RouterView /></section>
   </div>
 </template>
