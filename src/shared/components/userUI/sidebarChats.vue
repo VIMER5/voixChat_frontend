@@ -2,6 +2,7 @@
 import { onMounted } from "vue";
 import { useFriendStore } from "@/app/stores/friendStore";
 import userAvatar from "./userAvatar.vue";
+import userPanel from "./userPanel.vue";
 const storeFriend = useFriendStore();
 onMounted(() => {
   storeFriend.getFriend();
@@ -9,26 +10,38 @@ onMounted(() => {
 </script>
 
 <template>
-  <ul class="flex gap-[10px] flex-col">
-    <li v-for="[id, friend] in storeFriend.friends" :key="id">
-      <div class="d">
-        <userAvatar
+  <div class="sidebar__Chats">
+    <hr />
+    <ul class="friends">
+      <li v-for="[id, friend] in storeFriend.friends" :key="id">
+        <userPanel
+          :chat="'/chat/' + friend.id"
           status="online"
-          :img-url="friend.avatar"
-          :user-name="friend.username"
-          type="default"
-          class="w-[45px]"
+          :imgUrl="friend.avatar"
+          :username="friend.username"
+          notificationText="0"
         />
-        {{ friend.username }}
-      </div>
-    </li>
-  </ul>
+      </li>
+    </ul>
+  </div>
 </template>
 
 <style scoped>
-.d {
+.sidebar__Chats {
+  padding: 0 9px;
+  flex: 1;
+
+  overflow: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE и Edge */
+}
+.sidebar__Chats::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+.friends {
+  margin-top: 10px;
   display: flex;
-  align-items: center;
+  flex-direction: column;
   gap: 10px;
 }
 </style>

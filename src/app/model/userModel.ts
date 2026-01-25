@@ -6,7 +6,7 @@ export interface currentUserInfo {
   login: string;
   userName: string;
   email: string;
-  avatar: string | null;
+  avatar: string;
   status: string | null;
   emailConfirmed: boolean;
 }

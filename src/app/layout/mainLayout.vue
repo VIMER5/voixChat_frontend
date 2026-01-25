@@ -2,13 +2,24 @@
 import buttonDefoultSidebarChannels from "@/shared/components/ui/buttons/buttonDefoultSidebarChannels.vue";
 import logoIcon from "@/shared/icon/logoIcon.vue";
 import iconAddServer from "@/shared/icon/iconAddServer.vue";
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import userAvatar from "@/shared/components/userUI/userAvatar.vue";
 import { useUsersInfo } from "../stores/usersInfo";
 import { useSocketStore } from "@/app/stores/socketStore";
 import sidebarChats from "@/shared/components/userUI/sidebarChats.vue";
+import iconAddFriend from "@/shared/icon/iconAddFriend.vue";
+import usernamePlate from "@/shared/components/userUI/usernamePlate.vue";
 const store = useUsersInfo();
 store.getCurrentUserInfo();
+const username = computed(() => {
+  return store.userInfoCurrent ? store.userInfoCurrent.userName : "load";
+});
+const useravatar = computed(() => {
+  return store.userInfoCurrent ? store.userInfoCurrent.avatar : "load";
+});
+const userStatus = computed(() => {
+  return store.userInfoCurrent ? store.userInfoCurrent.status : "";
+});
 onMounted(() => {
   const socketStore = useSocketStore();
   socketStore.initSocket(sessionStorage.getItem("access")!);
@@ -24,26 +35,12 @@ const url = "https://cdn.discordapp.com/avatars/555259684584554497/30c74f18defc6
         <buttonDefoultSidebarChannels><logoIcon class="m-[8px]" /></buttonDefoultSidebarChannels>
       </RouterLink>
       <div v-if="userNtification.length > 0" class="user__notification my-[10px]">
-        <userAvatar
-          :img-url="url"
-          user-name="-=V.I.M.E.R=-"
-          status=""
-          type="big"
-          :notification="991"
-          :speak="true"
-        ></userAvatar>
+        <userAvatar :img-url="url" user-name="-=V.I.M.E.R=-" type="big" :notification="991" :speak="true"></userAvatar>
       </div>
 
       <div v-if="userNtification.length > 0" class="servers__gild my-[10px]">
         <hr />
-        <userAvatar
-          :img-url="url"
-          status=""
-          user-name="-=V.I.M.E.R=-"
-          type="big"
-          :notification="991"
-          :speak="true"
-        ></userAvatar>
+        <userAvatar :img-url="url" user-name="-=V.I.M.E.R=-" type="big" :notification="991" :speak="true"></userAvatar>
       </div>
       <div class="sidebar__channels__buttons">
         <hr />
@@ -52,7 +49,21 @@ const url = "https://cdn.discordapp.com/avatars/555259684584554497/30c74f18defc6
         </RouterLink>
       </div>
     </aside>
-    <aside class="sidebar__chats"><sidebarChats class="mt-[100px] ml-[10px]" /></aside>
+    <aside class="sidebar__chats">
+      <header class="header__sidebar__chats"><button class="button__search">Поиск</button></header>
+      <hr />
+      <RouterLink class="friendButton text-[5cqw]" to="/friends"
+        ><iconAddFriend class="h-[6.296cqw]" />Друзья</RouterLink
+      >
+      <sidebarChats />
+      <usernamePlate
+        status="online"
+        :url-user-avatar="useravatar"
+        :userStatus="userStatus"
+        :userName="username"
+        class="my-[10px] mx-[8px]"
+      />
+    </aside>
     <section class="chats"><RouterView /></section>
   </div>
 </template>
@@ -73,8 +84,13 @@ const url = "https://cdn.discordapp.com/avatars/555259684584554497/30c74f18defc6
   gap: 10px;
 }
 .sidebar__chats {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   background-color: var(--c-BlueGray-Dark);
   border-radius: 8px;
+  container-type: inline-size;
+  height: calc(100dvh - 30px);
 }
 .sidebar__channels__buttons {
   display: flex;
@@ -86,5 +102,31 @@ const url = "https://cdn.discordapp.com/avatars/555259684584554497/30c74f18defc6
   background-color: var(--c-BlueGray-Cool);
   margin-left: 10px;
   border-radius: 13px;
+}
+.header__sidebar__chats {
+  padding: 8px;
+}
+.button__search {
+  font-weight: 350;
+  color: #bababd;
+  border-radius: 5px;
+  width: 100%;
+  font-size: 5cqw;
+  padding: 8px 0;
+  background-color: var(--с-DeepBlueBlack-darker);
+  cursor: pointer;
+}
+.friendButton {
+  padding: 15px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+  color: #c0bcbc;
+  transition: all 0.5s;
+}
+.friendButton:hover {
+  background-color: var(--c-hoverButtons);
 }
 </style>

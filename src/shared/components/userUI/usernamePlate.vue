@@ -8,7 +8,7 @@ import buttonIcons from "@/shared/components/ui/buttons/buttonIcons.vue";
 
 defineProps<{
   userName: string;
-  userStatus: string;
+  userStatus: string | null;
   status: TypeStatusProps;
   urlUserAvatar: string;
 }>();
