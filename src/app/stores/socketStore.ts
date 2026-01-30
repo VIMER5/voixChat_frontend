@@ -2,8 +2,25 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 import { io, Socket } from "socket.io-client";
 import { useAuthStore } from "@/app/stores/authStore";
-import { useUsersInfo } from "./usersInfo";
+import { useUsersInfo } from "@/app/stores/usersInfo";
+import { useFriendStore } from "@/app/stores/friendStore";
 export const useSocketStore = defineStore("SocketStore", () => {
+  const notificationSound = ref<HTMLAudioElement | null>(null);
+
+  // playSound();
+  const variants = {
+    notificationSound1: "/sounds/notification.mp3",
+  };
+  function playSound(audio: keyof typeof variants) {
+    notificationSound.value = new Audio(variants[audio]);
+    if (notificationSound.value) {
+      notificationSound.value.currentTime = 0; // Перемотка в начало
+      notificationSound.value.play().catch((e) => {
+        console.log("Автовоспроизведение заблокировано:", e);
+      });
+    }
+  }
+
   const socket = ref<Socket | null>(null);
   const isConnected = ref(false);
   const error = ref<string | null>(null);
@@ -27,6 +44,12 @@ export const useSocketStore = defineStore("SocketStore", () => {
     socket.value.on("emailConfirmed", (data) => {
       const user = useUsersInfo();
       if (user.userInfoCurrent) user.userInfoCurrent.emailConfirmed = data.body;
+    });
+    socket.value.on("friendRequest", (data) => {
+      console.log(data);
+      const friendStore = useFriendStore();
+      friendStore.getfriendsRequest();
+      playSound("notificationSound1");
     });
 
     socket.value.on("disconnect", () => {

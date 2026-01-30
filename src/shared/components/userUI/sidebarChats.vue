@@ -4,9 +4,9 @@ import { useFriendStore } from "@/app/stores/friendStore";
 import userAvatar from "./userAvatar.vue";
 import userPanel from "./userPanel.vue";
 const storeFriend = useFriendStore();
-onMounted(() => {
-  storeFriend.getFriend();
-});
+// onMounted(() => {
+//   storeFriend.getFriend();
+// });
 </script>
 
 <template>

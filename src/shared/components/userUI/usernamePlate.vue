@@ -5,6 +5,8 @@ import iconDeafen from "@icons/iconDeaf.vue";
 import iconMute from "@icons/iconMute.vue";
 import iconSettings from "@icons/iconSettings.vue";
 import buttonIcons from "@/shared/components/ui/buttons/buttonIcons.vue";
+import { onMounted, ref } from "vue";
+
 
 defineProps<{
   userName: string;

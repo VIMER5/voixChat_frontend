@@ -11,7 +11,6 @@ const done = ref();
 let redirectTimer: any;
 onMounted(async () => {
   const token = route.params.token;
-  console.log(token);
   try {
     const data = await $api.get(`/auth/VerifyEmail/${token}`);
     done.value = "Успешное подтверждение почты, через 3 секунды мы вас перенаправим на главную страницу.";

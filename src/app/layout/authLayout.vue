@@ -77,7 +77,7 @@ onUnmounted(() => {
           </glass>
 
           <glass
-            class="test2 py-5 px-4 sm:py-[43px] sm:px-[38px] sm:rounded-[26px] w-max absolute z-10 scale-90 sm:scale-100"
+            class="test2 py-5 px-4 sm:py-[43px] sm:px-[38px] rounded-2xl sm:rounded-[26px] w-max absolute z-10 scale-90 sm:scale-100"
           >
             <iconUsers class="w-10 sm:w-14" />
           </glass>
@@ -157,6 +157,8 @@ onUnmounted(() => {
   -webkit-backdrop-filter: url(#blackGlass);
 
   background: rgba(0, 0, 0, 0.1);
-  box-shadow: 0 1px 1px rgba(255, 255, 255, 0.1), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+  box-shadow:
+    0 1px 1px rgba(255, 255, 255, 0.1),
+    inset 0 1px 1px rgba(255, 255, 255, 0.1);
 }
 </style>

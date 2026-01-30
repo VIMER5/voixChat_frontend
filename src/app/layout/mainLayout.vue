@@ -4,12 +4,15 @@ import logoIcon from "@/shared/icon/logoIcon.vue";
 import iconAddServer from "@/shared/icon/iconAddServer.vue";
 import { computed, onMounted, ref } from "vue";
 import userAvatar from "@/shared/components/userUI/userAvatar.vue";
-import { useUsersInfo } from "../stores/usersInfo";
+import { useUsersInfo } from "@/app/stores/usersInfo";
 import { useSocketStore } from "@/app/stores/socketStore";
+import { useFriendStore } from "@/app/stores/friendStore";
 import sidebarChats from "@/shared/components/userUI/sidebarChats.vue";
 import iconAddFriend from "@/shared/icon/iconAddFriend.vue";
 import usernamePlate from "@/shared/components/userUI/usernamePlate.vue";
+import notification from "@/shared/components/userUI/notification.vue";
 const store = useUsersInfo();
+const storeFriend = useFriendStore();
 store.getCurrentUserInfo();
 const username = computed(() => {
   return store.userInfoCurrent ? store.userInfoCurrent.userName : "load";
@@ -22,6 +25,9 @@ const userStatus = computed(() => {
 });
 onMounted(() => {
   const socketStore = useSocketStore();
+
+  storeFriend.getfriendsRequest();
+  storeFriend.getFriend();
   socketStore.initSocket(sessionStorage.getItem("access")!);
 });
 const userNtification = ref(["lol"]);
@@ -52,9 +58,10 @@ const url = "https://cdn.discordapp.com/avatars/555259684584554497/30c74f18defc6
     <aside class="sidebar__chats">
       <header class="header__sidebar__chats"><button class="button__search">Поиск</button></header>
       <hr />
-      <RouterLink class="friendButton text-[5cqw]" to="/friends"
-        ><iconAddFriend class="h-[6.296cqw]" />Друзья</RouterLink
-      >
+      <RouterLink class="friendButton text-[5cqw]" to="/friends">
+        <div class="text"><iconAddFriend class="h-[6.296cqw]" />Друзья</div>
+        <notification v-if="storeFriend.friendsRequest.size > 0" :notification-text="storeFriend.friendsRequest.size"
+      /></RouterLink>
       <sidebarChats />
       <usernamePlate
         status="online"
@@ -102,6 +109,10 @@ const url = "https://cdn.discordapp.com/avatars/555259684584554497/30c74f18defc6
   background-color: var(--c-BlueGray-Cool);
   margin-left: 10px;
   border-radius: 13px;
+  height: calc(100dvh - 30px);
+  display: flex;
+  flex-direction: column;
+  container-type: inline-size;
 }
 .header__sidebar__chats {
   padding: 8px;
@@ -121,12 +132,16 @@ const url = "https://cdn.discordapp.com/avatars/555259684584554497/30c74f18defc6
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 10px;
+  justify-content: space-between;
   font-weight: 600;
   color: #c0bcbc;
   transition: all 0.5s;
 }
 .friendButton:hover {
   background-color: var(--c-hoverButtons);
+}
+.friendButton > .text {
+  display: flex;
+  gap: 10px;
 }
 </style>

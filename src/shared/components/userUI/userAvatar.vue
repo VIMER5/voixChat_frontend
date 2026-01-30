@@ -17,7 +17,7 @@ const big = computed(() => {
 </script>
 
 <template>
-  <div :title="userName" class="aspect-square relative cursor-pointer">
+  <div :title="userName" class="tr aspect-square relative cursor-pointer">
     <userStatus v-if="status" :status="status" class="absolute right-0 bottom-0" />
     <img
       class="w-full h-full rounded-lg border-TurquoiseBlue-main"
@@ -29,4 +29,8 @@ const big = computed(() => {
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.tr {
+  transition: all 1s;
+}
+</style>

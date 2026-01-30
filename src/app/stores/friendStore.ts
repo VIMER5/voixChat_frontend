@@ -6,6 +6,7 @@ import $api from "@/app/API/axios";
 
 export const useFriendStore = defineStore("FriendStore", () => {
   const friends = ref<any>(new Map());
+  const friendsRequest = ref<any>(new Map());
 
   //   function addFriendToMap(friend: any) {
   //     if (friends.value.get(friend.id)) friends.value.set(friend.id, friend);
@@ -18,5 +19,13 @@ export const useFriendStore = defineStore("FriendStore", () => {
       }
     }
   }
-  return { friends, getFriend };
+  async function getfriendsRequest() {
+    const data = await $api.get("/user/friend/request");
+    if (data) {
+      for (const item of data.data) {
+        friendsRequest.value.set(item.id, item);
+      }
+    }
+  }
+  return { friends, getFriend, getfriendsRequest, friendsRequest };
 });

@@ -8,7 +8,10 @@ import login from "@/views/auth/login.vue";
 import passwordReset from "@/views/auth/passwordReset.vue";
 import register from "@/views/auth/register.vue";
 import verifyEmail from "@/views/auth/verifyEmail.vue";
-import friends from "@/views/friends.vue";
+
+import friendsList from "@/views/friends/ui/friendsList.vue";
+import friends from "@/views/friends/friends.vue";
+import friendRequests from "@/views/friends/ui/friendRequests.vue";
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -45,9 +48,20 @@ const router = createRouter({
           component: helloView,
         },
         {
-          path: "friends",
-          name: "friends",
+          path: "/friends",
           component: friends,
+          children: [
+            {
+              path: "",
+              name: "friends",
+              component: friendsList,
+            },
+            {
+              path: "requests",
+              name: "requests",
+              component: friendRequests,
+            },
+          ],
         },
         {
           path: "uikit",
