@@ -11,8 +11,10 @@ import sidebarChats from "@/shared/components/userUI/sidebarChats.vue";
 import iconAddFriend from "@/shared/icon/iconAddFriend.vue";
 import usernamePlate from "@/shared/components/userUI/usernamePlate.vue";
 import notification from "@/shared/components/userUI/notification.vue";
+import { useChatsStore } from "@/app/stores/chatsStore";
 const store = useUsersInfo();
 const storeFriend = useFriendStore();
+const storeChats = useChatsStore();
 store.getCurrentUserInfo();
 const username = computed(() => {
   return store.userInfoCurrent ? store.userInfoCurrent.userName : "load";
@@ -25,7 +27,7 @@ const userStatus = computed(() => {
 });
 onMounted(() => {
   const socketStore = useSocketStore();
-
+  storeChats.getMyChats();
   storeFriend.getfriendsRequest();
   storeFriend.getFriend();
   socketStore.initSocket(sessionStorage.getItem("access")!);

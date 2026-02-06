@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { onMounted } from "vue";
-import { useFriendStore } from "@/app/stores/friendStore";
+import { useChatsStore } from "@/app/stores/chatsStore";
 import userAvatar from "./userAvatar.vue";
 import userPanel from "./userPanel.vue";
-const storeFriend = useFriendStore();
+const storeChats = useChatsStore();
 // onMounted(() => {
 //   storeFriend.getFriend();
 // });
@@ -13,12 +13,12 @@ const storeFriend = useFriendStore();
   <div class="sidebar__Chats">
     <hr />
     <ul class="friends">
-      <li v-for="[id, friend] in storeFriend.friends" :key="id">
+      <li v-for="[id, chat] in storeChats.chats" :key="id">
         <userPanel
-          :chat="'/chat/' + friend.id"
+          :chat="'/chat/' + chat.id"
           status="online"
-          :imgUrl="friend.avatar"
-          :username="friend.username"
+          :imgUrl="chat.avatar ?? chat.chatMembers[0]?.avatar"
+          :username="chat.name ?? chat.chatMembers[0]?.username"
           notificationText="0"
         />
       </li>
