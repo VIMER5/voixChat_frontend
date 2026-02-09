@@ -10,6 +10,7 @@ interface ChatInfo {
   avatar: string;
   chatMembers: ChatMember[];
   _ChatParticipant: ChatParticipant;
+  _Messages?: Message[];
 }
 
 interface ChatMember {
@@ -23,4 +24,16 @@ interface ChatParticipant {
   updatedAt: Date;
 }
 
-export { type GetMyChatsResponse, type ChatInfo, type ChatMember, type ChatParticipant };
+interface Message {
+  id: number;
+  content: string;
+  type: any;
+  createdAt: Date;
+  updatedAt: Date;
+  _User: {
+    username: string;
+    avatar: string | null;
+  };
+}
+
+export { type GetMyChatsResponse, type ChatInfo, type ChatMember, type ChatParticipant, type Message };

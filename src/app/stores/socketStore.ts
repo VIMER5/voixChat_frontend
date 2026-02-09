@@ -4,6 +4,7 @@ import { io, Socket } from "socket.io-client";
 import { useAuthStore } from "@/app/stores/authStore";
 import { useUsersInfo } from "@/app/stores/usersInfo";
 import { useFriendStore } from "@/app/stores/friendStore";
+import { useChatsStore } from "@/app/stores/chatsStore";
 export const useSocketStore = defineStore("SocketStore", () => {
   const notificationSound = ref<HTMLAudioElement | null>(null);
 
@@ -50,6 +51,11 @@ export const useSocketStore = defineStore("SocketStore", () => {
       const friendStore = useFriendStore();
       friendStore.getfriendsRequest();
       playSound("notificationSound1");
+    });
+    socket.value.on("newMessage", (data) => {
+      const chatStore = useChatsStore();
+      console.log(data);
+      chatStore.addNewMessage(data.chatId, data.body);
     });
 
     socket.value.on("disconnect", () => {

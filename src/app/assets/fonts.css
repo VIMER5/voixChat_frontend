@@ -1,54 +1,54 @@
 @font-face {
   font-family: "whitney";
-  src: url("fonts/whitneybold.woff2") format("woff2");
+  src: url("/fonts/whitneybold.woff2") format("woff2");
   font-weight: 700;
   font-style: normal;
 }
 @font-face {
   font-family: "whitney";
-  src: url("fonts/whitneybook.woff2") format("woff2");
+  src: url("/fonts/whitneybook.woff2") format("woff2");
   font-weight: 350;
   font-style: normal;
 }
 @font-face {
   font-family: "whitney";
-  src: url("fonts/whitneylight.woff2") format("woff2");
+  src: url("/fonts/whitneylight.woff2") format("woff2");
   font-weight: 300;
   font-style: normal;
 }
 @font-face {
   font-family: "whitney";
-  src: url("fonts/whitneymedium.woff2") format("woff2");
+  src: url("/fonts/whitneymedium.woff2") format("woff2");
   font-weight: 500;
   font-style: normal;
 }
 @font-face {
   font-family: "whitney";
-  src: url("fonts/whitneysemibold.woff2") format("woff2");
+  src: url("/fonts/whitneysemibold.woff2") format("woff2");
   font-weight: 600;
   font-style: normal;
 }
 @font-face {
   font-family: "whitney";
-  src: url("fonts/whitneybookitalic.woff2") format("woff2");
+  src: url("/fonts/whitneybookitalic.woff2") format("woff2");
   font-weight: 350;
   font-style: italic;
 }
 @font-face {
   font-family: "whitney";
-  src: url("fonts/whitneylightitalic.woff2") format("woff2");
+  src: url("/fonts/whitneylightitalic.woff2") format("woff2");
   font-weight: 300;
   font-style: italic;
 }
 @font-face {
   font-family: "whitney";
-  src: url("fonts/whitneymediumitalic.woff2") format("woff2");
+  src: url("/fonts/whitneymediumitalic.woff2") format("woff2");
   font-weight: 500;
   font-style: italic;
 }
 @font-face {
   font-family: "whitney";
-  src: url("fonts/WhitneySemiboldItalic.woff2") format("woff2");
+  src: url("/fonts/WhitneySemiboldItalic.woff2") format("woff2");
   font-weight: 600;
   font-style: italic;
 }

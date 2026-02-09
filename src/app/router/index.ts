@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import authLayout from "@layout/authLayout.vue";
 import mainLayout from "@layout/mainLayout.vue";
+import personalChat from "../../views/personalChat/personalChat.vue";
 import { guard } from "./guards";
 
 import helloView from "@/views/helloView.vue";
@@ -64,6 +65,11 @@ const router = createRouter({
           ],
         },
         {
+          path: "chat/:idChat",
+          name: "personalChat",
+          component: personalChat,
+        },
+        {
           path: "uikit",
           name: "uikit",
           component: () => import("@views/uiKit.vue"),
@@ -83,11 +89,8 @@ const router = createRouter({
       ],
     },
     {
-      path: "/about",
+      path: "/:pathMatch(.*)",
       name: "about",
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import("@views/AboutView.vue"),
     },
   ],
