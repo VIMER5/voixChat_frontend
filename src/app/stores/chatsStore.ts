@@ -15,7 +15,7 @@ export const useChatsStore = defineStore("chatsStore", () => {
     const data = await $api.get("/user/chat/getMyChats");
     if (data) {
       for (const item of data.data.myChat) {
-        chats.value.set(item.id, item);
+        chats.value.set(item.id, normalizationChatInfo(item));
       }
     }
   }
@@ -24,7 +24,7 @@ export const useChatsStore = defineStore("chatsStore", () => {
       try {
         const { data } = await $api.get(`/user/chat/getChatById/${idChat}`);
         if (data) {
-          chats.value.set(data.id, data);
+          chats.value.set(data.id, normalizationChatInfo(data));
         }
       } catch (e) {
         if (e instanceof AxiosError) {
@@ -38,6 +38,9 @@ export const useChatsStore = defineStore("chatsStore", () => {
       }
     }
     return chats.value.get(idChat)!;
+  }
+  function normalizationChatInfo(data: ChatInfo): ChatInfo {
+    return { ...data, _Messages: data._Messages ? data._Messages.reverse() : [] };
   }
   const chatById = computed(() => (id: string) => {
     return chats.value.get(id) || null;

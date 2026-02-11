@@ -34,6 +34,8 @@ onMounted(adjustHeight);
       placeholder="Введите текст..."
       rows="1"
       @input="adjustHeight"
+      spellcheck="true"
+      wrap="hard"
     ></textarea>
   </div>
 </template>

@@ -31,6 +31,7 @@ interface Message {
   createdAt: Date;
   updatedAt: Date;
   _User: {
+    id: number;
     username: string;
     avatar: string | null;
   };
