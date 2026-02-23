@@ -50,5 +50,9 @@ export const useChatsStore = defineStore("chatsStore", () => {
     const chat = await getChatInfo(chatId);
     if (chat && "_Messages" in chat) chat._Messages?.push(data);
   }
-  return { chats, getMyChats, getChatInfo, chatById, addNewMessage };
+  async function addOldMessage(chatId: string, data: Message[]) {
+    const chat = await getChatInfo(chatId);
+    if (chat && "_Messages" in chat) chat._Messages?.unshift(...data.reverse());
+  }
+  return { chats, getMyChats, getChatInfo, chatById, addNewMessage, addOldMessage };
 });

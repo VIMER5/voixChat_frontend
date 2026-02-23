@@ -6,11 +6,16 @@ import { useRoute, useRouter } from "vue-router";
 import headerPersonalChat from "./components/headerPersonalChat.vue";
 import messageInput from "@/shared/components/ui/inputs/messageInput.vue";
 import messageList from "@/shared/components/chats/messageList.vue";
+const refList = ref();
+
+watch(refList, (d) => {
+  console.log(d);
+});
 
 const route = useRoute();
 const router = useRouter();
 const storeChats = useChatsStore();
-const imput = ref();
+
 function send(content: string) {
   $api.post("/user/chat/sendMessage", {
     type: "text",
@@ -46,8 +51,8 @@ onMounted(async () => {
 <template>
   <div class="personalChat">
     <headerPersonalChat :userName="chatName" />
-    <div class="chatContent">
-      <messageList :data="chatData?._Messages" />
+    <div ref="refList" class="chatContent">
+      <messageList :data="chatData?._Messages" :chatId="chatId" />
     </div>
     <footer class="personalChatooter">
       <messageInput @send="(d) => send(d)" />
@@ -63,7 +68,9 @@ onMounted(async () => {
 }
 .chatContent {
   flex: 1;
-  overflow: auto;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 .personalChatooter {
   padding: 10px 15px;
