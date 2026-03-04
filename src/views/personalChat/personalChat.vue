@@ -6,15 +6,13 @@ import { useRoute, useRouter } from "vue-router";
 import headerPersonalChat from "./components/headerPersonalChat.vue";
 import messageInput from "@/shared/components/ui/inputs/messageInput.vue";
 import messageList from "@/shared/components/chats/messageList.vue";
+import { useRtcStore } from "@/app/stores/rtcStore";
 const refList = ref();
-
-watch(refList, (d) => {
-  console.log(d);
-});
 
 const route = useRoute();
 const router = useRouter();
 const storeChats = useChatsStore();
+const rtcStore = useRtcStore();
 
 function send(content: string) {
   $api.post("/user/chat/sendMessage", {
@@ -38,6 +36,7 @@ const chatName = computed(() => {
   }
   return "Ошибка";
 });
+const localVideo = ref<HTMLVideoElement | null>(null);
 onMounted(async () => {
   if (chatId.value) {
     const data = await storeChats.getChatInfo(chatId.value);
@@ -55,6 +54,24 @@ onMounted(async () => {
       <messageList :data="chatData?._Messages" :chatId="chatId" />
     </div>
     <footer class="personalChatooter">
+      <div class="rtc-panel">
+        <p>
+          Статус: <strong>{{ rtcStore.status }}</strong>
+        </p>
+
+        <audio
+          :ref="
+            (el) => {
+              rtcStore.remoteAudio = el as HTMLAudioElement;
+            }
+          "
+          autoplay
+          controls
+        ></audio>
+
+        <button @click="rtcStore.startCall(chatId!)" class="call-btn">📞 Позвонить</button>
+        <button @click="rtcStore.endCall()" class="call-btn">📞 сброс</button>
+      </div>
       <messageInput @send="(d) => send(d)" />
     </footer>
   </div>

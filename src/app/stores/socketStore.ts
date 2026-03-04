@@ -5,6 +5,8 @@ import { useAuthStore } from "@/app/stores/authStore";
 import { useUsersInfo } from "@/app/stores/usersInfo";
 import { useFriendStore } from "@/app/stores/friendStore";
 import { useChatsStore } from "@/app/stores/chatsStore";
+import { useRtcStore } from "./rtcStore";
+
 export const useSocketStore = defineStore("SocketStore", () => {
   const notificationSound = ref<HTMLAudioElement | null>(null);
 
@@ -56,6 +58,19 @@ export const useSocketStore = defineStore("SocketStore", () => {
       const chatStore = useChatsStore();
       console.log(data);
       chatStore.addNewMessage(data.chatId, data.body);
+    });
+
+    socket.value.on("offer-call", async (data) => {
+      const RtcStore = useRtcStore();
+      await RtcStore.offerCall(data);
+    });
+    socket.value.on("answer-made", async (data) => {
+      const RtcStore = useRtcStore();
+      await RtcStore.answerMade(data);
+    });
+    socket.value.on("ice-candidate", async (data) => {
+      const RtcStore = useRtcStore();
+      await RtcStore.iceCandidate(data);
     });
 
     socket.value.on("disconnect", () => {
