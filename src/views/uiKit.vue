@@ -7,12 +7,19 @@ import buttonIcons from "@/shared/components/ui/buttons/buttonIcons.vue";
 import iconDeafen from "@icons/iconDeaf.vue";
 import iconMute from "@icons/iconMute.vue";
 import iconSettings from "@icons/iconSettings.vue";
+import { computed } from "vue";
+import { useOnlineStore } from "@/app/stores/onlineStore";
+
+const store = useOnlineStore();
+const userStatusf = computed(() => {
+  return store.getUserOnline(1);
+});
 
 const url = "https://cdn.discordapp.com/avatars/555259684584554497/30c74f18defc66cc70aff045b8730032.webp?size=100";
 </script>
 
 <template>
-  <h1 class="font-semibold text-CTA_red not-italic">Hello world!</h1>
+  <h1 class="font-semibold text-CTA_red not-italic">Hello world! {{ userStatusf }}</h1>
   <div class="d flex gap-10 flex-col">
     <co notification-text="12" />
     <div class="dd flex gap-10">

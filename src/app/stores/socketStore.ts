@@ -6,6 +6,13 @@ import { useUsersInfo } from "@/app/stores/usersInfo";
 import { useFriendStore } from "@/app/stores/friendStore";
 import { useChatsStore } from "@/app/stores/chatsStore";
 import { useRtcStore } from "./rtcStore";
+import { onlineDataSchema } from "@/app/validators/socketValidator";
+import { useOnlineStore } from "@/app/stores/onlineStore";
+
+interface FriendStatus {
+  userID: number;
+  status: "online" | "offline";
+}
 
 export const useSocketStore = defineStore("SocketStore", () => {
   const notificationSound = ref<HTMLAudioElement | null>(null);
@@ -17,7 +24,7 @@ export const useSocketStore = defineStore("SocketStore", () => {
   function playSound(audio: keyof typeof variants) {
     notificationSound.value = new Audio(variants[audio]);
     if (notificationSound.value) {
-      notificationSound.value.currentTime = 0; // Перемотка в начало
+      notificationSound.value.currentTime = 0;
       notificationSound.value.play().catch((e) => {
         console.log("Автовоспроизведение заблокировано:", e);
       });
@@ -43,23 +50,25 @@ export const useSocketStore = defineStore("SocketStore", () => {
       error.value = null;
       console.log("Socket connected");
     });
-
+    //--------------------[systeam]------------------------
     socket.value.on("emailConfirmed", (data) => {
       const user = useUsersInfo();
       if (user.userInfoCurrent) user.userInfoCurrent.emailConfirmed = data.body;
     });
+    //-------------------[friend]--------------------------
     socket.value.on("friendRequest", (data) => {
       console.log(data);
       const friendStore = useFriendStore();
       friendStore.getfriendsRequest();
       playSound("notificationSound1");
     });
+    //--------------[MSG]---------------------------
     socket.value.on("newMessage", (data) => {
       const chatStore = useChatsStore();
       console.log(data);
       chatStore.addNewMessage(data.chatId, data.body);
     });
-
+    //--------------------[RTC]------------------------
     socket.value.on("offer-call", async (data) => {
       const RtcStore = useRtcStore();
       await RtcStore.offerCall(data);
@@ -72,11 +81,38 @@ export const useSocketStore = defineStore("SocketStore", () => {
       const RtcStore = useRtcStore();
       await RtcStore.iceCandidate(data);
     });
+    //----------------------[online]-------------------
+    socket.value.on("friend-online", async (data) => {
+      const onlineStore = useOnlineStore();
 
+      const { error, value } = onlineDataSchema.validate(data, {
+        abortEarly: true,
+        stripUnknown: true,
+      });
+      if (error) return console.log(error);
+      await onlineStore.setStatus(value);
+    });
+    socket.value.on("friends-statuses", (statuses: FriendStatus[]) => {
+      const onlineStore = useOnlineStore();
+      statuses.forEach(({ userID, status }) => {
+        onlineStore.setStatus({ userID, status });
+      });
+    });
+    socket.value.on("friend-offline", async (data) => {
+      const onlineStore = useOnlineStore();
+      const { error, value } = onlineDataSchema.validate(data, {
+        abortEarly: true,
+        stripUnknown: true,
+      });
+      if (error) return console.log(error);
+      await onlineStore.setStatus(value);
+      console.log(value);
+    });
     socket.value.on("disconnect", () => {
       isConnected.value = false;
     });
   }
+
   async function handleRefresh() {
     const authStore = useAuthStore();
     try {

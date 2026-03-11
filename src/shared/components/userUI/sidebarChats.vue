@@ -1,12 +1,21 @@
 <script setup lang="ts">
 import { onMounted } from "vue";
 import { useChatsStore } from "@/app/stores/chatsStore";
+import { useOnlineStore } from "@/app/stores/onlineStore";
 import userAvatar from "./userAvatar.vue";
 import userPanel from "./userPanel.vue";
 const storeChats = useChatsStore();
+const onlineStore = useOnlineStore();
 // onMounted(() => {
 //   storeFriend.getFriend();
 // });
+const getUserOnlineStatus = (chat: any): "online" | "offline" => {
+  if (chat.chatMembers && chat.chatMembers.length === 1) {
+    const memberId = chat.chatMembers[0].id;
+    return onlineStore.getUserOnline(memberId) ?? "offline";
+  }
+  return "offline";
+};
 </script>
 
 <template>
@@ -16,7 +25,7 @@ const storeChats = useChatsStore();
       <li v-for="[id, chat] in storeChats.chats" :key="id">
         <userPanel
           :chat="'/chat/' + chat.id"
-          status="online"
+          :status="getUserOnlineStatus(chat)"
           :imgUrl="chat.avatar ?? chat.chatMembers[0]?.avatar"
           :username="chat.name ?? chat.chatMembers[0]?.username"
           notificationText="0"
