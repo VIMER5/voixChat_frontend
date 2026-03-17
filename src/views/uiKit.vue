@@ -7,8 +7,79 @@ import buttonIcons from "@/shared/components/ui/buttons/buttonIcons.vue";
 import iconDeafen from "@icons/iconDeaf.vue";
 import iconMute from "@icons/iconMute.vue";
 import iconSettings from "@icons/iconSettings.vue";
-import { computed } from "vue";
+import { computed, ref, onUnmounted, onBeforeUnmount } from "vue";
 import { useOnlineStore } from "@/app/stores/onlineStore";
+
+import { RoomEvent, Track } from "livekit-client";
+import { useVoiceStore } from "@/app/stores/voiceStore";
+import $api from "@/app/API/axios";
+
+const stored = useVoiceStore();
+const remoteVideos = ref<HTMLDivElement | null>(null);
+
+// Выносим функцию, чтобы ссылка была постоянной для .off()
+const onTrackSubscribed = (track: any, publication: any, participant: any) => {
+  if (track.kind === "video") {
+    const element = track.attach();
+    element.setAttribute("data-participant", participant.identity);
+
+    element.style.width = "100%";
+    remoteVideos.value?.appendChild(element);
+  } else if (track.kind === "audio") {
+    const audioElement = track.attach();
+    document.body.appendChild(audioElement);
+  }
+};
+
+async function handleJoin() {
+  try {
+    const res = await $api.post("/sfu/live-token", {
+      roomName: "318343e4-03f4-11f1-9289-bc24110cce17",
+      participantName: "ddawd",
+    });
+
+    if (res.data?.token) {
+      stored.room.off(RoomEvent.TrackSubscribed, onTrackSubscribed);
+
+      stored.room.on(RoomEvent.TrackSubscribed, onTrackSubscribed);
+
+      await stored.connect(res.data.token);
+    }
+  } catch (err) {
+    console.error("Ошибка при входе в комнату:", err);
+  }
+}
+
+// Очистка ресурсов
+onBeforeUnmount(() => {
+  // 1. Снимаем слушатель событий
+  stored.room.off(RoomEvent.TrackSubscribed, onTrackSubscribed);
+
+  // 2. Отвязываем ВСЕ треки (и свои, и чужие)
+  // Это уберет ошибку "native event handler", так как элементы DOM еще существуют
+  const allParticipants = [stored.room.localParticipant, ...Array.from(stored.room.remoteParticipants.values())];
+
+  allParticipants.forEach((p) => {
+    p.trackPublications.forEach((pub) => {
+      const track = pub.track;
+      if (!track) return;
+      track.detach();
+      if (track.kind === "audio") {
+        track.attachedElements.forEach((el) => {
+          el.remove();
+        });
+      }
+    });
+  });
+
+  // 3. Важно: очищаем контейнер
+  if (remoteVideos.value) {
+    remoteVideos.value.innerHTML = "";
+  }
+
+  // 4. Если хочешь, чтобы при уходе с роута звук/видео гасли:
+  stored.disconnect();
+});
 
 const store = useOnlineStore();
 const userStatusf = computed(() => {
@@ -48,6 +119,27 @@ const url = "https://cdn.discordapp.com/avatars/555259684584554497/30c74f18defc6
       class="mx-10 max-w-[400px]"
     />
   </div>
+
+  <div class="chat">
+    <div class="video-chat">
+      <button @click="handleJoin" v-if="stored.room.state !== 'connected'">Начать звонок</button>
+      <button @click="stored.disconnect()" v-else>Выйти</button> <br />
+      <button @click="stored.toggleMicrophone()">микро</button>
+      {{ stored.roomState }}
+      <div ref="remoteVideos" class="grid"></div>
+    </div>
+  </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 10px;
+}
+:deep(video) {
+  width: 100%;
+  border-radius: 8px;
+  background: #222;
+}
+</style>

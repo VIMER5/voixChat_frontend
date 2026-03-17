@@ -50,7 +50,8 @@ export const useSocketStore = defineStore("SocketStore", () => {
       error.value = null;
       console.log("Socket connected");
     });
-    //--------------------[systeam]------------------------
+
+    //--------------------[system]------------------------
     socket.value.on("emailConfirmed", (data) => {
       const user = useUsersInfo();
       if (user.userInfoCurrent) user.userInfoCurrent.emailConfirmed = data.body;

@@ -7,6 +7,7 @@ import headerPersonalChat from "./components/headerPersonalChat.vue";
 import messageInput from "@/shared/components/ui/inputs/messageInput.vue";
 import messageList from "@/shared/components/chats/messageList.vue";
 import { useRtcStore } from "@/app/stores/rtcStore";
+import voicePanel from "@/views/personalChat/components/voicePanel.vue";
 const refList = ref();
 
 const route = useRoute();
@@ -50,6 +51,7 @@ onMounted(async () => {
 <template>
   <div class="personalChat">
     <headerPersonalChat :userName="chatName" />
+    <voicePanel />
     <div ref="refList" class="chatContent">
       <messageList :data="chatData?._Messages" :chatId="chatId" />
     </div>

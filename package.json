@@ -14,9 +14,11 @@
     "type-check": "vue-tsc --build"
   },
   "dependencies": {
+    "@livekit/krisp-noise-filter": "^0.4.1",
     "@tailwindcss/vite": "^4.1.18",
     "axios": "^1.13.2",
     "joi": "^18.0.2",
+    "livekit-client": "^2.17.3",
     "pinia": "^3.0.4",
     "socket.io-client": "^4.8.3",
     "tailwindcss": "^4.1.18",

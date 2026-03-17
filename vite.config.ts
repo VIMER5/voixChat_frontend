@@ -8,6 +8,7 @@ import vueDevTools from "vite-plugin-vue-devtools";
 export default defineConfig({
   server: {
     host: "0.0.0.0",
+    allowedHosts: ["www.voixchat.ru"],
   },
   plugins: [vue(), vueDevTools(), tailwindcss()],
   resolve: {
