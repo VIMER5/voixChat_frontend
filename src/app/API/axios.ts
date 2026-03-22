@@ -1,10 +1,11 @@
 import axios, { type AxiosRequestConfig, type AxiosResponse } from "axios";
 import { useAuthStore } from "@/app/stores/authStore";
-const baseURL = "http://localhost:3030/api/";
+
+const { VITE_BASE_URL_SERVER } = import.meta.env;
 let isRefreshing = false;
 const $api = axios.create({
   withCredentials: true,
-  baseURL: baseURL,
+  baseURL: VITE_BASE_URL_SERVER,
   headers: {
     "Content-Type": "application/json",
   },

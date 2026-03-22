@@ -7,13 +7,14 @@ import buttonIcons from "@/shared/components/ui/buttons/buttonIcons.vue";
 import iconDeafen from "@icons/iconDeaf.vue";
 import iconMute from "@icons/iconMute.vue";
 import iconSettings from "@icons/iconSettings.vue";
+import { useChatsStore } from "@/app/stores/chatsStore";
 import { computed, ref, onUnmounted, onBeforeUnmount } from "vue";
 import { useOnlineStore } from "@/app/stores/onlineStore";
 
 import { RoomEvent, Track } from "livekit-client";
 import { useVoiceStore } from "@/app/stores/voiceStore";
 import $api from "@/app/API/axios";
-
+const ChatsStore = useChatsStore();
 const stored = useVoiceStore();
 const remoteVideos = ref<HTMLDivElement | null>(null);
 
@@ -35,14 +36,21 @@ async function handleJoin() {
   try {
     const res = await $api.post("/sfu/live-token", {
       roomName: "318343e4-03f4-11f1-9289-bc24110cce17",
-      participantName: "ddawd",
+      participantName: "318343e4-03f4-11f1-9289-bc24110cce17",
     });
 
     if (res.data?.token) {
       stored.room.off(RoomEvent.TrackSubscribed, onTrackSubscribed);
 
       stored.room.on(RoomEvent.TrackSubscribed, onTrackSubscribed);
-
+      stored.room.on(RoomEvent.ParticipantConnected, (d) => {
+        const f = ChatsStore.chatById(d.name!);
+        console.log(
+          f!.chatMembers.filter((g) => {
+            return g.id == Number(d.identity.split("_")[1]);
+          }),
+        );
+      });
       await stored.connect(res.data.token);
     }
   } catch (err) {
@@ -126,6 +134,7 @@ const url = "https://cdn.discordapp.com/avatars/555259684584554497/30c74f18defc6
       <button @click="stored.disconnect()" v-else>Выйти</button> <br />
       <button @click="stored.toggleMicrophone()">микро</button>
       {{ stored.roomState }}
+      {{ stored.room.name }}
       <div ref="remoteVideos" class="grid"></div>
     </div>
   </div>

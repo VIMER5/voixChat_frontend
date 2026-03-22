@@ -2,6 +2,8 @@ import { shallowRef, ref, computed } from "vue";
 import { Room, RoomEvent, Track, LocalAudioTrack, type TrackPublication } from "livekit-client";
 import { defineStore } from "pinia";
 
+const { VITE_WSS_URL_SFU } = import.meta.env;
+
 export const useVoiceStore = defineStore("VoiceStore", () => {
   const isCameraOn = ref(false);
   const isMicOn = ref(false);
@@ -38,7 +40,7 @@ export const useVoiceStore = defineStore("VoiceStore", () => {
   async function connect(token: string) {
     if (room.value.state === "connected") return;
 
-    await room.value.connect("wss://sfu.voixchat.ru", token);
+    await room.value.connect(VITE_WSS_URL_SFU, token);
     await room.value.localParticipant.setCameraEnabled(isCameraOn.value);
     await room.value.localParticipant.setMicrophoneEnabled(isMicOn.value);
     updateState();

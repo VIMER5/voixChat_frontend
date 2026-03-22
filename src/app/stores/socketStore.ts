@@ -9,6 +9,8 @@ import { useRtcStore } from "./rtcStore";
 import { onlineDataSchema } from "@/app/validators/socketValidator";
 import { useOnlineStore } from "@/app/stores/onlineStore";
 
+const { VITE_BASE_URL_SOCKET } = import.meta.env;
+
 interface FriendStatus {
   userID: number;
   status: "online" | "offline";
@@ -36,7 +38,7 @@ export const useSocketStore = defineStore("SocketStore", () => {
   const error = ref<string | null>(null);
   function initSocket(token: string) {
     if (socket.value?.connected) return;
-    socket.value = io("http://localhost:3030", {
+    socket.value = io(VITE_BASE_URL_SOCKET, {
       auth: { token },
     });
     socket.value.on("error", async (err) => {
