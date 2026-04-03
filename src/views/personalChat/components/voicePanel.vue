@@ -2,10 +2,17 @@
 import ResizablePanel from "@/app/service/resizablePanel";
 import { ref, onMounted, onUnmounted, computed } from "vue";
 import defaultButton from "@/shared/components/ui/buttons/defaultButton.vue";
+import { useVoiceStore } from "@/app/stores/voiceStore";
+import userAvatar from "@/shared/components/userUI/userAvatar.vue";
 
 const panel = ref<HTMLElement | null>(null);
 const resizable: ResizablePanel = new ResizablePanel(panel);
+const voiceStor = useVoiceStore();
 const newHeight = computed(() => resizable.panelHeight.value);
+const porops = defineProps<{
+  chatID: string;
+}>();
+const voiceInfo = computed(() => voiceStor.currentVoice(porops.chatID));
 onMounted(() => {
   resizable.init();
 });
@@ -16,9 +23,26 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="voicePanel" ref="panel" :style="{ height: newHeight + 'px' }">
+  <div
+    v-if="voiceInfo && voiceInfo.members.length > 0"
+    class="voicePanel"
+    ref="panel"
+    :style="{ height: newHeight + 'px' }"
+  >
     <div class="voicePanel-content">
-      {{ newHeight }}
+      <div class="users">
+        <ul class="users-ul">
+          <li v-for="user in voiceInfo.members">
+            <userAvatar
+              class="userAvatarVoicePanel"
+              :img-url="user.avatar"
+              type="voice"
+              :speak="false"
+              :user-name="user.userName"
+            />
+          </li>
+        </ul>
+      </div>
       <slot></slot>
     </div>
     <div class="voice__channel__management">
@@ -38,11 +62,16 @@ onUnmounted(() => {
   flex-direction: column;
   padding-block: 15px;
   align-items: center;
+  container-type: size;
 }
 
 .voicePanel-content {
   flex: 1;
   overflow: auto;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .resize-handle {
@@ -59,5 +88,14 @@ onUnmounted(() => {
 }
 .join__voice-button {
   padding: 8px 12px 8px 12px !important;
+}
+.userAvatarVoicePanel {
+  width: 31cqh;
+  max-width: 95px;
+}
+.users-ul {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
 }
 </style>

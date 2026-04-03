@@ -98,7 +98,7 @@ const url = "https://cdn.discordapp.com/avatars/555259684584554497/30c74f18defc6
 </script>
 
 <template>
-  <h1 class="font-semibold text-CTA_red not-italic">Hello world! {{ userStatusf }}</h1>
+  <h1 class="font-semibold text-CTA_red not-italic dssa">Hello world! {{ userStatusf }}</h1>
   <div class="d flex gap-10 flex-col">
     <co notification-text="12" />
     <div class="dd flex gap-10">
@@ -141,6 +141,9 @@ const url = "https://cdn.discordapp.com/avatars/555259684584554497/30c74f18defc6
 </template>
 
 <style scoped>
+.dssa {
+  grid-area: headerPage;
+}
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));

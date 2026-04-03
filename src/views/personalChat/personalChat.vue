@@ -50,8 +50,8 @@ onMounted(async () => {
 
 <template>
   <div class="personalChat">
-    <headerPersonalChat :userName="chatName" />
-    <voicePanel />
+    <!-- <headerPersonalChat :userName="chatName" /> -->
+    <voicePanel :chatID="chatId!" />
     <div ref="refList" class="chatContent">
       <messageList :data="chatData?._Messages" :chatId="chatId" />
     </div>

@@ -8,6 +8,7 @@ import { useChatsStore } from "@/app/stores/chatsStore";
 import { useRtcStore } from "./rtcStore";
 import { onlineDataSchema } from "@/app/validators/socketValidator";
 import { useOnlineStore } from "@/app/stores/onlineStore";
+import { useVoiceStore } from "./voiceStore";
 
 const { VITE_BASE_URL_SOCKET } = import.meta.env;
 
@@ -83,6 +84,15 @@ export const useSocketStore = defineStore("SocketStore", () => {
     socket.value.on("ice-candidate", async (data) => {
       const RtcStore = useRtcStore();
       await RtcStore.iceCandidate(data);
+    });
+    // ------------------[Voice]-----------------------
+    socket.value.on("disconnectedUserInVoice", async (data) => {
+      const voiceStore = useVoiceStore();
+      voiceStore.disconnectedUserInVoice(data.body.id, data.body.userID);
+    });
+    socket.value.on("connectedUserInVoice", async (data) => {
+      const voiceStore = useVoiceStore();
+      voiceStore.connectedUserInVoice(data.body.id, data.body.userInfo);
     });
     //----------------------[online]-------------------
     socket.value.on("friend-online", async (data) => {

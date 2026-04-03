@@ -13,6 +13,8 @@ import verifyEmail from "@/views/auth/verifyEmail.vue";
 import friendsList from "@/views/friends/ui/friendsList.vue";
 import friends from "@/views/friends/friends.vue";
 import friendRequests from "@/views/friends/ui/friendRequests.vue";
+
+import headerPersonalChat from "@/views/personalChat/components/headerPersonalChat.vue";
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -67,7 +69,10 @@ const router = createRouter({
         {
           path: "chat/:idChat",
           name: "personalChat",
-          component: personalChat,
+          components: {
+            default: personalChat,
+            header: headerPersonalChat,
+          },
         },
         {
           path: "uikit",
