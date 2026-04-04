@@ -13,10 +13,13 @@ import usernamePlate from "@/shared/components/userUI/usernamePlate.vue";
 import notification from "@/shared/components/userUI/notification.vue";
 import { useChatsStore } from "@/app/stores/chatsStore";
 import { useVoiceStore } from "../stores/voiceStore";
+import loadView from "@/views/loadView.vue";
+const socketStore = useSocketStore();
 const store = useUsersInfo();
 const storeFriend = useFriendStore();
 const storeChats = useChatsStore();
 const voiceStore = useVoiceStore();
+
 store.getCurrentUserInfo();
 const username = computed(() => {
   return store.userInfoCurrent ? store.userInfoCurrent.userName : "load";
@@ -28,7 +31,6 @@ const userStatus = computed(() => {
   return store.userInfoCurrent ? store.userInfoCurrent.status : "";
 });
 onMounted(() => {
-  const socketStore = useSocketStore();
   storeChats.getMyChats();
   storeFriend.getfriendsRequest();
   storeFriend.getFriend();
@@ -40,6 +42,9 @@ const url = "https://cdn.discordapp.com/avatars/555259684584554497/30c74f18defc6
 </script>
 
 <template>
+  <Teleport to="body">
+    <loadView v-if="!socketStore.isReady" />
+  </Teleport>
   <div class="mainLayout">
     <RouterLink class="sidebar__channels__backbutton" to="/">
       <buttonDefoultSidebarChannels><logoIcon class="m-[8px]" /></buttonDefoultSidebarChannels>
@@ -87,7 +92,7 @@ const url = "https://cdn.discordapp.com/avatars/555259684584554497/30c74f18defc6
   padding: 15px 10px 15px 0px;
   display: grid;
   grid-template-columns: max(3.333dvw, 48px) max(18.78dvw, 250px) auto;
-  grid-template-rows: min(3.333dvw, 55px) 1fr;
+  grid-template-rows: max(3.333dvw, 55px) 1fr;
   grid-template-areas:
     "backbutton search headerPage"
     "sidebarChannels sidebarChats PageContant";

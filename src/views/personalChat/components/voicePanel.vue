@@ -4,6 +4,7 @@ import { ref, onMounted, onUnmounted, computed } from "vue";
 import defaultButton from "@/shared/components/ui/buttons/defaultButton.vue";
 import { useVoiceStore } from "@/app/stores/voiceStore";
 import userAvatar from "@/shared/components/userUI/userAvatar.vue";
+import iconCallReject from "@/shared/icon/iconCallReject.vue";
 
 const panel = ref<HTMLElement | null>(null);
 const resizable: ResizablePanel = new ResizablePanel(panel);
@@ -46,7 +47,18 @@ onUnmounted(() => {
       <slot></slot>
     </div>
     <div class="voice__channel__management">
-      <defaultButton class="join__voice-button">Присоединиться к звонку</defaultButton>
+      <defaultButton
+        @click="voiceStor.handleJoin(chatID)"
+        v-if="voiceStor.room.name != chatID"
+        class="join__voice-button"
+      >
+        Присоединиться к звонку
+      </defaultButton>
+      <ul v-else class="voice__channel__management__buttons">
+        <li>
+          <button @click="voiceStor.disconnect" class="bg-CTA_red"><iconCallReject /></button>
+        </li>
+      </ul>
     </div>
     <div class="resize-handle" @mousedown="resizable.start"></div>
   </div>
@@ -97,5 +109,18 @@ onUnmounted(() => {
   display: flex;
   flex-direction: row;
   gap: 10px;
+}
+.voice__channel__management__buttons {
+  display: flex;
+}
+.voice__channel__management__buttons button {
+  height: 35px;
+  padding: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.voice__channel__management__buttons button svg {
+  height: 70%;
+  width: auto;
 }
 </style>

@@ -56,7 +56,7 @@ onMounted(async () => {
       <messageList :data="chatData?._Messages" :chatId="chatId" />
     </div>
     <footer class="personalChatooter">
-      <div class="rtc-panel">
+      <!-- <div class="rtc-panel">
         <p>
           Статус: <strong>{{ rtcStore.status }}</strong>
         </p>
@@ -73,7 +73,7 @@ onMounted(async () => {
 
         <button @click="rtcStore.startCall(chatId!)" class="call-btn">📞 Позвонить</button>
         <button @click="rtcStore.endCall()" class="call-btn">📞 сброс</button>
-      </div>
+      </div> -->
       <messageInput @send="(d) => send(d)" />
     </footer>
   </div>

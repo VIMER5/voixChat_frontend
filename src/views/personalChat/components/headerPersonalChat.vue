@@ -24,6 +24,10 @@ const chatName = computed(() => {
   }
   return "Ошибка";
 });
+
+function call() {
+  if (chatId.value) voiceStore.handleJoin(chatId.value);
+}
 </script>
 
 <template>
@@ -33,7 +37,7 @@ const chatName = computed(() => {
       <div class="userName">{{ chatName }}</div>
       <div class="buttens">
         <ul>
-          <li><iconCall @click="voiceStore.handleJoin" /></li>
+          <li><iconCall @click="call" /></li>
         </ul>
       </div>
     </div>

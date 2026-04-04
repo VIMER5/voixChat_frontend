@@ -9,6 +9,7 @@ import { useRtcStore } from "./rtcStore";
 import { onlineDataSchema } from "@/app/validators/socketValidator";
 import { useOnlineStore } from "@/app/stores/onlineStore";
 import { useVoiceStore } from "./voiceStore";
+import { useCallModalStore } from "./callModalStorel";
 
 const { VITE_BASE_URL_SOCKET } = import.meta.env;
 
@@ -36,6 +37,7 @@ export const useSocketStore = defineStore("SocketStore", () => {
 
   const socket = ref<Socket | null>(null);
   const isConnected = ref(false);
+  const isReady = ref(false);
   const error = ref<string | null>(null);
   function initSocket(token: string) {
     if (socket.value?.connected) return;
@@ -43,6 +45,7 @@ export const useSocketStore = defineStore("SocketStore", () => {
       auth: { token },
     });
     socket.value.on("error", async (err) => {
+      error.value = err;
       if (err === "Unauthorized") {
         console.log(err);
         await handleRefresh();
@@ -52,6 +55,10 @@ export const useSocketStore = defineStore("SocketStore", () => {
       isConnected.value = true;
       error.value = null;
       console.log("Socket connected");
+    });
+    socket.value.on("socketReady", (data) => {
+      if (data.status == "ready") isReady.value = true;
+      else isReady.value = false;
     });
 
     //--------------------[system]------------------------
@@ -94,6 +101,15 @@ export const useSocketStore = defineStore("SocketStore", () => {
       const voiceStore = useVoiceStore();
       voiceStore.connectedUserInVoice(data.body.id, data.body.userInfo);
     });
+    socket.value.on("newCallVoice", async (data) => {
+      const CallModalStore = useCallModalStore();
+      CallModalStore.openModal({
+        avatar: data.body.avatar,
+        chatName: data.body.chatName,
+        chatID: data.body.chatID,
+      });
+      console.log(data);
+    });
     //----------------------[online]-------------------
     socket.value.on("friend-online", async (data) => {
       const onlineStore = useOnlineStore();
@@ -123,6 +139,7 @@ export const useSocketStore = defineStore("SocketStore", () => {
     });
     socket.value.on("disconnect", () => {
       isConnected.value = false;
+      isReady.value = false;
     });
   }
 
@@ -151,5 +168,5 @@ export const useSocketStore = defineStore("SocketStore", () => {
       socket.value = null;
     }
   }
-  return { initSocket, emit, disconnect, socket, isConnected, error };
+  return { initSocket, emit, disconnect, isReady, socket, isConnected, error };
 });

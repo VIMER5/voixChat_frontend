@@ -6,8 +6,9 @@ import iconMute from "@icons/iconMute.vue";
 import iconSettings from "@icons/iconSettings.vue";
 import buttonIcons from "@/shared/components/ui/buttons/buttonIcons.vue";
 import { onMounted, ref } from "vue";
+import { useVoiceStore } from "@/app/stores/voiceStore";
 
-
+const voiceStore = useVoiceStore();
 defineProps<{
   userName: string;
   userStatus: string | null;
@@ -32,11 +33,22 @@ defineProps<{
       </div>
     </div>
     <div class="items-center gap-3.25 flex h-full">
-      <buttonIcons class="h-[70%]"><iconMute /></buttonIcons>
+      <buttonIcons
+        :class="{ dis: voiceStore.roomState != 'connected' }"
+        :cursor="voiceStore.roomState != 'connected' ? 'not-allowed' : 'pointer'"
+        @click="voiceStore.toggleMicrophone"
+        class="h-[70%]"
+      >
+        <iconMute :isMuted="!voiceStore.isMicOn" />
+      </buttonIcons>
       <buttonIcons class="h-[70%]"><iconDeafen /></buttonIcons>
       <buttonIcons class="h-[70%]"><iconSettings /></buttonIcons>
     </div>
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.dis {
+  cursor: not-allowed !important;
+}
+</style>

@@ -40,6 +40,7 @@ export const useVoiceStore = defineStore("VoiceStore", () => {
   }
 
   async function toggleMicrophone() {
+    if (room.value.state !== "connected") return;
     isMicOn.value = !isMicOn.value;
     await room.value.localParticipant.setMicrophoneEnabled(isMicOn.value, {
       noiseSuppression: true,
@@ -95,12 +96,12 @@ export const useVoiceStore = defineStore("VoiceStore", () => {
     }
   };
 
-  async function handleJoin() {
+  async function handleJoin(chatID: string = "318343e4-03f4-11f1-9289-bc24110cce17") {
     try {
+      console.log(chatID);
       await disconnect();
       const res = await $api.post("/sfu/live-token", {
-        roomName: "318343e4-03f4-11f1-9289-bc24110cce17",
-        participantName: "318343e4-03f4-11f1-9289-bc24110cce17",
+        roomName: chatID,
       });
 
       if (res.data?.token) {
@@ -127,6 +128,7 @@ export const useVoiceStore = defineStore("VoiceStore", () => {
     roomState,
     voicesChannelsInfo,
     currentVoice,
+    isMicOn,
     connect,
     disconnect,
     toggleCamera,
