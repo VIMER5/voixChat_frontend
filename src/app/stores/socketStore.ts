@@ -99,7 +99,7 @@ export const useSocketStore = defineStore("SocketStore", () => {
     });
     socket.value.on("connectedUserInVoice", async (data) => {
       const voiceStore = useVoiceStore();
-      voiceStore.connectedUserInVoice(data.body.id, data.body.userInfo);
+      await voiceStore.connectedUserInVoice(data.body.id, data.body.userInfo);
     });
     socket.value.on("newCallVoice", async (data) => {
       const CallModalStore = useCallModalStore();
@@ -108,7 +108,6 @@ export const useSocketStore = defineStore("SocketStore", () => {
         chatName: data.body.chatName,
         chatID: data.body.chatID,
       });
-      console.log(data);
     });
     //----------------------[online]-------------------
     socket.value.on("friend-online", async (data) => {
@@ -134,7 +133,7 @@ export const useSocketStore = defineStore("SocketStore", () => {
         stripUnknown: true,
       });
       if (error) return console.log(error);
-      await onlineStore.setStatus(value);
+      onlineStore.setStatus(value);
       console.log(value);
     });
     socket.value.on("disconnect", () => {

@@ -14,13 +14,12 @@ import notification from "@/shared/components/userUI/notification.vue";
 import { useChatsStore } from "@/app/stores/chatsStore";
 import { useVoiceStore } from "../stores/voiceStore";
 import loadView from "@/views/loadView.vue";
+import { useAppStore } from "../stores/appStore";
 const socketStore = useSocketStore();
 const store = useUsersInfo();
 const storeFriend = useFriendStore();
-const storeChats = useChatsStore();
-const voiceStore = useVoiceStore();
+const appStore = useAppStore();
 
-store.getCurrentUserInfo();
 const username = computed(() => {
   return store.userInfoCurrent ? store.userInfoCurrent.userName : "load";
 });
@@ -30,20 +29,14 @@ const useravatar = computed(() => {
 const userStatus = computed(() => {
   return store.userInfoCurrent ? store.userInfoCurrent.status : "";
 });
-onMounted(() => {
-  storeChats.getMyChats();
-  storeFriend.getfriendsRequest();
-  storeFriend.getFriend();
-  voiceStore.getVoicesInfo();
-  socketStore.initSocket(sessionStorage.getItem("access")!);
-});
+onMounted(() => appStore.initApp());
 const userNtification = ref(["lol"]);
 const url = "https://cdn.discordapp.com/avatars/555259684584554497/30c74f18defc66cc70aff045b8730032.webp?size=100";
 </script>
 
 <template>
   <Teleport to="body">
-    <loadView v-if="!socketStore.isReady" />
+    <loadView v-if="!socketStore.isReady || !appStore.appReady" />
   </Teleport>
   <div class="mainLayout">
     <RouterLink class="sidebar__channels__backbutton" to="/">

@@ -32,6 +32,13 @@ export const useVoiceStore = defineStore("VoiceStore", () => {
     if (temp) {
       temp.members = temp.members.filter((item) => item.id != UserInfo.id);
       temp.members.push(UserInfo);
+    } else {
+      const data = await $api.post("/voice/info", {
+        chatID: id,
+      });
+      if (data && data.data) {
+        voicesChannelsInfo.value.set(data.data.id, data.data);
+      }
     }
   }
   async function toggleCamera() {
