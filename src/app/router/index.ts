@@ -38,6 +38,11 @@ const router = createRouter({
           name: "password_reset",
           component: passwordReset,
         },
+        {
+          path: "password_reset/:token",
+          name: "confirm_password_reset",
+          component: () => import("@/views/auth/confirmPasswordReset.vue"),
+        },
       ],
     },
     {
@@ -78,6 +83,12 @@ const router = createRouter({
           path: "uikit",
           name: "uikit",
           component: () => import("@views/uiKit.vue"),
+        },
+        {
+          path: "admin",
+          name: "admin",
+          component: () => import("@views/AdminView.vue"),
+          meta: { requiresAdmin: true }
         },
       ],
     },

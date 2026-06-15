@@ -1,9 +1,11 @@
 import { ref, computed } from "vue";
 import { defineStore } from "pinia";
 import $api from "@/app/API/axios";
+import { type currentUserInfo } from "../model/userModel";
 
 export const useAuthStore = defineStore("AuthStore", () => {
   const tokenAccess = ref(null);
+  const user = ref<currentUserInfo | null>(null);
 
   async function validateToken() {
     let token = sessionStorage.getItem("access");
@@ -11,9 +13,9 @@ export const useAuthStore = defineStore("AuthStore", () => {
       const upTokens = await tokenUpdateByRefreshToken();
       if (!upTokens) return false;
     }
-    token = sessionStorage.getItem("access");
     try {
-      await $api.post("/auth/validate");
+      const response = await $api.get("user");
+      user.value = response.data;
       return true;
     } catch (err) {
       return false;
@@ -29,5 +31,29 @@ export const useAuthStore = defineStore("AuthStore", () => {
       return false;
     }
   }
-  return { tokenAccess, validateToken, tokenUpdateByRefreshToken };
+
+  function logout() {
+      sessionStorage.removeItem("access");
+      user.value = null;
+  }
+
+  async function forgotPassword(email: string) {
+    try {
+      await $api.post("/auth/forgot-password", { email });
+      return true;
+    } catch (err) {
+      return false;
+    }
+  }
+
+  async function resetPassword(token: string, passwordNew: string) {
+    try {
+      await $api.post("/auth/reset-password", { token, password: passwordNew });
+      return true;
+    } catch (err) {
+      return false;
+    }
+  }
+
+  return { tokenAccess, user, validateToken, tokenUpdateByRefreshToken, logout, forgotPassword, resetPassword };
 });

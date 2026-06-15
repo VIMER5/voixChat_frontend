@@ -11,7 +11,11 @@
     "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
     "build-only": "vite build",
-    "type-check": "vue-tsc --build"
+    "type-check": "vue-tsc --build",
+    "docker:build": "docker build -t frontend-voixchat:1.0 .",
+    "docker:run": "docker run -d --name front-voixchat -p 80:80 --env-file .env frontend-voixchat:1.0",
+    "docker:save": "docker save frontend-voixchat:1.0 -o frontend-voixchat.tar",
+    "docker:load": "docker load -i frontend-voixchat.tar"
   },
   "dependencies": {
     "@livekit/krisp-noise-filter": "^0.4.1",

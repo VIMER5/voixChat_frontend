@@ -9,4 +9,6 @@ export interface currentUserInfo {
   avatar: string;
   status: string | null;
   emailConfirmed: boolean;
+  role: "user" | "admin";
+  isBanned: boolean;
 }

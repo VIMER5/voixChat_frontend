@@ -21,12 +21,18 @@ defineProps<{
           <h3 class="login">{{ login }}#{{ id }}</h3>
         </div>
       </div>
-      <div class="d">dd</div>
+      <div class="actions">
+        <slot name="actions"></slot>
+      </div>
     </div>
   </div>
 </template>
 
 <style scoped>
+.actions {
+  display: flex;
+  gap: 10px;
+}
 .avatar {
   width: clamp(36px, 3.811252268602541cqw, 60px);
 }

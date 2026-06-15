@@ -7,8 +7,10 @@ import iconSettings from "@icons/iconSettings.vue";
 import buttonIcons from "@/shared/components/ui/buttons/buttonIcons.vue";
 import { onMounted, ref } from "vue";
 import { useVoiceStore } from "@/app/stores/voiceStore";
+import { useModalStore } from "@/app/stores/modalStore";
 
 const voiceStore = useVoiceStore();
+const modalStore = useModalStore();
 defineProps<{
   userName: string;
   userStatus: string | null;
@@ -42,7 +44,7 @@ defineProps<{
         <iconMute :isMuted="!voiceStore.isMicOn" />
       </buttonIcons>
       <buttonIcons class="h-[70%]"><iconDeafen /></buttonIcons>
-      <buttonIcons class="h-[70%]"><iconSettings /></buttonIcons>
+      <buttonIcons @click="modalStore.openUserSettings" class="h-[70%]"><iconSettings /></buttonIcons>
     </div>
   </div>
 </template>

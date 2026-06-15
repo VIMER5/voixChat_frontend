@@ -73,6 +73,17 @@ export const useSocketStore = defineStore("SocketStore", () => {
       friendStore.getfriendsRequest();
       playSound("notificationSound1");
     });
+    socket.value.on("friendAccepted", (data) => {
+      const friendStore = useFriendStore();
+      friendStore.getFriend();
+    });
+    socket.value.on("newChat", (data) => {
+      const chatStore = useChatsStore();
+      chatStore.getMyChats();
+      if (socket.value) {
+        socket.value.emit("join-chat", { chatId: data.chatId });
+      }
+    });
     //--------------[MSG]---------------------------
     socket.value.on("newMessage", (data) => {
       const chatStore = useChatsStore();

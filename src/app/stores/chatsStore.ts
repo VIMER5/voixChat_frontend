@@ -19,6 +19,19 @@ export const useChatsStore = defineStore("chatsStore", () => {
       }
     }
   }
+  async function createGroupChat(name: string, members: number[], avatar?: string) {
+    try {
+      const response = await $api.post("/user/chat/createGroup", {
+        name,
+        members,
+        avatar,
+      });
+      return response.data;
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
+  }
   async function getChatInfo(idChat: string): Promise<ChatInfo | errorPush> {
     if (!chats.value.has(idChat)) {
       try {
@@ -54,5 +67,5 @@ export const useChatsStore = defineStore("chatsStore", () => {
     const chat = await getChatInfo(chatId);
     if (chat && "_Messages" in chat) chat._Messages?.unshift(...data.reverse());
   }
-  return { chats, getMyChats, getChatInfo, chatById, addNewMessage, addOldMessage };
+  return { chats, getMyChats, createGroupChat, getChatInfo, chatById, addNewMessage, addOldMessage };
 });

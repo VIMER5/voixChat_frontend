@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { defineProps, defineModel } from "vue";
-
 const {
   error = false,
   placeholder = "NN",

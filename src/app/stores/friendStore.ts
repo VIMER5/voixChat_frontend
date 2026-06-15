@@ -27,5 +27,37 @@ export const useFriendStore = defineStore("FriendStore", () => {
       }
     }
   }
-  return { friends, getFriend, getfriendsRequest, friendsRequest };
+
+  async function acceptFriend(friendId: number) {
+    try {
+      await $api.patch("/user/friend/accept", { friendId });
+      const friend = friendsRequest.value.get(friendId);
+      if (friend) {
+        friendsRequest.value.delete(friendId);
+        friends.value.set(friendId, friend);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  async function declineFriend(friendId: number) {
+    try {
+      await $api.delete("/user/friend/decline", { data: { friendId } });
+      friendsRequest.value.delete(friendId);
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  async function removeFriend(friendId: number) {
+    try {
+      await $api.delete("/user/friend/", { data: { friendId } });
+      friends.value.delete(friendId);
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  return { friends, getFriend, getfriendsRequest, friendsRequest, acceptFriend, declineFriend, removeFriend };
 });

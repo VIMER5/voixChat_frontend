@@ -15,10 +15,39 @@ import { useChatsStore } from "@/app/stores/chatsStore";
 import { useVoiceStore } from "../stores/voiceStore";
 import loadView from "@/views/loadView.vue";
 import { useAppStore } from "../stores/appStore";
+import baseModal from "@/shared/modalWindows/baseModal.vue";
+import formInput from "@/shared/components/ui/inputs/formInput.vue";
+
 const socketStore = useSocketStore();
 const store = useUsersInfo();
 const storeFriend = useFriendStore();
 const appStore = useAppStore();
+const chatsStore = useChatsStore();
+
+const openCreateGroupModal = ref(false);
+const groupName = ref("");
+const selectedMembers = ref<number[]>([]);
+
+async function createGroup() {
+  if (!groupName.value || selectedMembers.value.length === 0) return;
+  try {
+    await chatsStore.createGroupChat(groupName.value, selectedMembers.value);
+    openCreateGroupModal.value = false;
+    groupName.value = "";
+    selectedMembers.value = [];
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+function toggleMember(id: number) {
+  const index = selectedMembers.value.indexOf(id);
+  if (index === -1) {
+    selectedMembers.value.push(id);
+  } else {
+    selectedMembers.value.splice(index, 1);
+  }
+}
 
 const username = computed(() => {
   return store.userInfoCurrent ? store.userInfoCurrent.userName : "load";
@@ -58,7 +87,9 @@ const url = "https://cdn.discordapp.com/avatars/555259684584554497/30c74f18defc6
         </RouterLink>
       </div>
     </aside>
-    <header class="header__sidebar__chats"><button class="button__search">Поиск</button></header>
+    <header class="header__sidebar__chats">
+      <button @click="openCreateGroupModal = true" class="button__search">Создать группу</button>
+    </header>
     <aside class="sidebar__chats">
       <hr />
       <RouterLink class="friendButton text-[5cqw]" to="/friends">
@@ -77,9 +108,102 @@ const url = "https://cdn.discordapp.com/avatars/555259684584554497/30c74f18defc6
     <header class="page-header"><router-view name="header" /></header>
     <section class="chats"><RouterView /></section>
   </div>
+
+  <baseModal @update:open="(d) => (openCreateGroupModal = d)" :open="openCreateGroupModal">
+    <div class="createGroupModal">
+      <h2 class="text-white text-xl font-bold mb-4">Создать групповой чат</h2>
+      <formInput v-model="groupName" placeholder="Название группы" class="mb-4" />
+
+      <h3 class="text-white text-sm font-semibold mb-2 opacity-60 uppercase">Выберите друзей</h3>
+      <div class="friendsListScroll">
+        <div
+          v-for="[id, friend] in storeFriend.friends"
+          :key="id"
+          @click="toggleMember(friend.id)"
+          :class="['friendItem', selectedMembers.includes(friend.id) ? 'selected' : '']"
+        >
+          <div class="flex items-center gap-3">
+            <userAvatar :img-url="friend.avatar" :user-name="friend.username" type="default" status="offline" class="w-8 h-8" />
+            <span class="text-white">{{ friend.username }}</span>
+          </div>
+          <div :class="['checkbox', selectedMembers.includes(friend.id) ? 'checked' : '']"></div>
+        </div>
+      </div>
+
+      <button @click="createGroup" :disabled="!groupName || selectedMembers.length === 0" class="createBtn">
+        Создать чат
+      </button>
+    </div>
+  </baseModal>
 </template>
 
 <style scoped>
+.createGroupModal {
+  width: 440px;
+  display: flex;
+  flex-direction: column;
+}
+.friendsListScroll {
+  max-height: 300px;
+  overflow-y: auto;
+  margin-bottom: 20px;
+  padding-right: 5px;
+}
+.friendsListScroll::-webkit-scrollbar {
+  width: 4px;
+}
+.friendsListScroll::-webkit-scrollbar-thumb {
+  background: var(--с-SpaceCharcoal_69);
+  border-radius: 10px;
+}
+.friendItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.friendItem:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+.friendItem.selected {
+  background: rgba(255, 255, 255, 0.1);
+}
+.checkbox {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+  position: relative;
+}
+.checkbox.checked {
+  background: var(--c-TurquoiseBlue-main);
+  border-color: var(--c-TurquoiseBlue-main);
+}
+.checkbox.checked::after {
+  content: "✓";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 14px;
+}
+.createBtn {
+  background-color: var(--c-TurquoiseBlue-main);
+  color: white;
+  padding: 12px;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.createBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
 .mainLayout {
   height: 100%;
   padding: 15px 10px 15px 0px;

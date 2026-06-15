@@ -5,9 +5,13 @@ import { useUsersInfo } from "./stores/usersInfo";
 import { watch, ref } from "vue";
 import { useCallModalStore } from "./stores/callModalStorel";
 import callModal from "@modalWindows/callModal.vue";
+import BannedModal from "@/shared/modalWindows/BannedModal.vue";
+import UserSettingsModal from "@/shared/modalWindows/UserSettingsModal.vue";
+import { useModalStore } from "./stores/modalStore";
 
 const userStore = useUsersInfo();
 const callModalStore = useCallModalStore();
+const modalStore = useModalStore();
 const openEmailConfirmedModal = ref<boolean>(false);
 watch(
   () => userStore.userInfoCurrent?.emailConfirmed,
@@ -44,6 +48,10 @@ const ff = {
       </div>
     </TransitionGroup>
   </Teleport>
+  <Teleport to="body">
+    <BannedModal v-if="userStore.userInfoCurrent?.isBanned" />
+  </Teleport>
+  <UserSettingsModal v-if="modalStore.isUserSettingsOpen" />
 </template>
 
 <style scoped></style>

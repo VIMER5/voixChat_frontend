@@ -9,7 +9,6 @@ export const useUsersInfo = defineStore("UsersInfo", () => {
   let usersNotifications = ref<typeUserNotification>();
 
   async function getCurrentUserInfo() {
-    if (userInfoCurrent.value) return userInfoCurrent.value;
     try {
       const userInfo = await $api.get("user");
       userInfoCurrent.value = userInfo.data;

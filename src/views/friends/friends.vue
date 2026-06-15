@@ -12,6 +12,9 @@ const openAddFriendsModal = ref<boolean>(false);
 const errorTextModel = ref<string>("");
 const doneTextModel = ref<string>("");
 const addInput = ref();
+onMounted(() => {
+  storeFriend.getfriendsRequest();
+});
 async function addFriend() {
   try {
     errorTextModel.value = "";
