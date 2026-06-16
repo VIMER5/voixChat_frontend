@@ -19,22 +19,24 @@ const emit = defineEmits<{
 
 <style scoped>
 .bc__baseModel {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgb(0, 0, 0, 45%);
+  background-color: rgba(0, 0, 0, 0.45);
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  z-index: 9999;
 }
 .baseModel {
   background-color: var(--с-DeepBlueBlack-lighter);
   display: flex;
   flex-direction: column;
   width: max-content;
+  max-width: 90vw;
   padding: 25px 19px;
   border-radius: 10px;
   font-size: 20px;

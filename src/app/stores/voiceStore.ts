@@ -59,6 +59,16 @@ export const useVoiceStore = defineStore("VoiceStore", () => {
     new Room({
       adaptiveStream: true,
       dynacast: true,
+      publishDefaults: {
+        simulcast: true,
+      },
+      videoCaptureDefaults: {
+        resolution: {
+          width: 640,
+          height: 480,
+          frameRate: 30,
+        },
+      },
     }),
   );
 
@@ -99,7 +109,7 @@ export const useVoiceStore = defineStore("VoiceStore", () => {
       await room.value.localParticipant.setMicrophoneEnabled(newState, {
         noiseSuppression: true,
         echoCancellation: true,
-        autoGainControl: false,
+        autoGainControl: true,
       });
       isMicOn.value = newState;
     } catch (err) {
@@ -111,11 +121,22 @@ export const useVoiceStore = defineStore("VoiceStore", () => {
     if (room.value.state === ConnectionState.Connected) return;
 
     try {
-      await room.value.connect(VITE_WSS_URL_SFU, token);
+      // Обеспечиваем использование wss протокола
+      const connectUrl = VITE_WSS_URL_SFU.startsWith('http') 
+        ? VITE_WSS_URL_SFU.replace(/^http/, 'ws') 
+        : VITE_WSS_URL_SFU;
+
+      await room.value.connect(connectUrl, token);
       updateState();
 
       if (isCameraOn.value) await room.value.localParticipant.setCameraEnabled(true);
-      if (isMicOn.value) await room.value.localParticipant.setMicrophoneEnabled(true);
+      if (isMicOn.value) {
+        await room.value.localParticipant.setMicrophoneEnabled(true, {
+          noiseSuppression: true,
+          echoCancellation: true,
+          autoGainControl: true,
+        });
+      }
 
       room.value.on(RoomEvent.Connected, updateState);
       room.value.on(RoomEvent.Disconnected, updateState);
@@ -135,7 +156,20 @@ export const useVoiceStore = defineStore("VoiceStore", () => {
       // Вместо создания нового объекта Room, просто очищаем текущий?
       // LiveKit рекомендует новый объект, но нам нужно сохранить реактивность и слушателей в компонентах.
       // Поэтому мы заменяем room.value, но компоненты должны это учитывать.
-      room.value = new Room({ adaptiveStream: true, dynacast: true });
+      room.value = new Room({
+        adaptiveStream: true,
+        dynacast: true,
+        publishDefaults: {
+          simulcast: true,
+        },
+        videoCaptureDefaults: {
+          resolution: {
+            width: 640,
+            height: 480,
+            frameRate: 30,
+          },
+        },
+      });
     }
     isCameraOn.value = false;
     isMicOn.value = false;

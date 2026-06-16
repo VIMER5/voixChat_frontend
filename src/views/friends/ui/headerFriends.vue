@@ -1,20 +1,19 @@
 <script setup lang="ts">
 import iconUsers from "@/shared/icon/iconUsers.vue";
-import { ref, onMounted } from "vue";
-import baseModal from "@modalWindows/baseModal.vue";
-import formInput from "@/shared/components/ui/inputs/formInput.vue";
 import notification from "@/shared/components/userUI/notification.vue";
 import { useFriendStore } from "@/app/stores/friendStore";
+import { ref } from "vue";
+import baseModal from "@modalWindows/baseModal.vue";
+import formInput from "@/shared/components/ui/inputs/formInput.vue";
 import $api from "@/app/API/axios";
 import { AxiosError } from "axios";
+
 const storeFriend = useFriendStore();
 const openAddFriendsModal = ref<boolean>(false);
 const errorTextModel = ref<string>("");
 const doneTextModel = ref<string>("");
 const addInput = ref();
-onMounted(() => {
-  storeFriend.getfriendsRequest();
-});
+
 async function addFriend() {
   try {
     errorTextModel.value = "";
@@ -24,17 +23,15 @@ async function addFriend() {
     });
     doneTextModel.value = "Запрос отправлен";
   } catch (e) {
-    console.log(e);
     if (e instanceof AxiosError && e.status != 500 && e.response) errorTextModel.value = e.response.data;
   }
-  // user/friend/
 }
 </script>
 
 <template>
   <header class="friend-header">
-    <div class="friend-header__title flex items-center">
-      <RouterLink to="/" class="md:hidden p-2 -ml-2 mr-2 text-[#c0bcbc] hover:text-white transition-colors">
+    <div class="flex items-center gap-2">
+      <RouterLink to="/" class="md:hidden p-2 -ml-2 text-[#c0bcbc] hover:text-white transition-colors">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -49,51 +46,50 @@ async function addFriend() {
           <path d="m15 18-6-6 6-6" />
         </svg>
       </RouterLink>
-      <iconUsers class="w-[21px]" color="#BABABD" opacity="0.54" />
-      <h2 class="mx-[10px]">Друзья</h2>
-      <hr class="friend-header__title-hr" />
+      <div class="friend-header__title">
+        <iconUsers class="w-[21px]" color="#BABABD" opacity="0.54" />
+        <h2 class="mx-[10px]">Друзья</h2>
+        <hr class="friend-header__title-hr" />
+      </div>
     </div>
-    <div class="friend__buttons">
-      <RouterLink class="link" to="/friends">Все</RouterLink>
-      <RouterLink class="link" to="/friends/requests"
+    <div class="friend__buttons overflow-x-auto scrollbar-hide">
+      <RouterLink class="link whitespace-nowrap" to="/friends">Все</RouterLink>
+      <RouterLink class="link whitespace-nowrap" to="/friends/requests"
         >Запросы
         <notification v-if="storeFriend.friendsRequest.size > 0" :notification-text="storeFriend.friendsRequest.size"
       /></RouterLink>
-      <button @click="openAddFriendsModal = true" class="link link__accent">Добавить в друзья</button>
+      <button @click="openAddFriendsModal = true" class="link link__accent whitespace-nowrap">Добавить</button>
     </div>
   </header>
-  <div class="content"><RouterView /></div>
+
   <baseModal @update:open="(d) => (openAddFriendsModal = d)" :open="openAddFriendsModal">
     <div class="friends__modal__content">
       <div class="h3">Добавить в друзья</div>
       <formInput v-model="addInput" placeholder="username#1"><iconUsers class="w-[23px]" /></formInput>
       <div v-if="errorTextModel" class="error__model">{{ errorTextModel }}</div>
       <div v-if="doneTextModel" class="done__model">{{ doneTextModel }}</div>
-      <button @click="addFriend" class="send_Friend">Отправить запрос дружбы</button>
+      <button @click="addFriend" class="send_Friend">Отправить запрос</button>
     </div>
   </baseModal>
 </template>
 
 <style scoped>
 .friend-header {
-  border-bottom: 0.3px solid var(--с-SpaceCharcoal_69);
-  padding: 13px 20px;
+  height: 100%;
+  padding: 0 20px;
   display: flex;
+  align-items: center;
 }
 .friend__buttons {
   display: flex;
   gap: 10px;
   margin-left: 10px;
   align-items: center;
-  overflow-x: auto;
-  scrollbar-width: none;
-}
-.friend__buttons::-webkit-scrollbar {
-  display: none;
 }
 .friend-header__title {
   display: flex;
   align-items: center;
+  height: 100%;
 }
 h2 {
   color: rgb(186, 186, 189, 54%);
@@ -103,7 +99,7 @@ h2 {
 .friend-header__title-hr {
   border: 0px;
   border-right: 0.5px solid rgb(186, 186, 189, 54%);
-  height: 43.47826086956522%;
+  height: 20px;
 }
 .link {
   padding: 2.5px 11px;
@@ -111,30 +107,20 @@ h2 {
   font-weight: 350;
   border-radius: 6px;
   transition: all 0.3s;
-  white-space: nowrap;
+  font-size: 14px;
 }
 .link:hover {
   color: white;
   background-color: rgb(47, 49, 55, 41%);
 }
 .link__accent {
-  padding-block: 3px !important;
   background-color: var(--c-TurquoiseBlue-main);
-  font-size: 15px;
   font-weight: 600;
   color: white;
   cursor: pointer;
 }
 .friends__modal__content {
-  width: 90vw;
-  max-width: 500px;
-  min-width: 200px;
-  transition: all 0.3s;
-}
-@media (min-width: 768px) {
-  .friends__modal__content {
-    width: 27.63888888888889dvw;
-  }
+  width: min(440px, 90vw);
 }
 .h3 {
   margin-bottom: 25px;
@@ -149,25 +135,11 @@ h2 {
   cursor: pointer;
   font-size: 16px;
 }
-.content {
-  margin: 20px 20px 0 20px;
-  flex: 1;
-  overflow: auto;
-  scrollbar-width: none;
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
   -ms-overflow-style: none;
-}
-.error__model {
-  margin-top: 8px;
-  font-size: 14px;
-  color: var(--color-CTA_red);
-  width: max-content;
-  margin-left: 10px;
-}
-.done__model {
-  margin-top: 8px;
-  font-size: 14px;
-  color: #2e7747;
-  width: max-content;
-  margin-left: 10px;
+  scrollbar-width: none;
 }
 </style>

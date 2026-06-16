@@ -9,23 +9,38 @@ const position = reactive({ x: 0, y: 0 });
 const isDragging = ref(false);
 let offset = { x: 0, y: 0 };
 const voiceStore = useVoiceStore();
-function startDrag(e: MouseEvent) {
+
+function startDrag(e: MouseEvent | TouchEvent) {
   isDragging.value = true;
-  offset.x = e.clientX - position.x;
-  offset.y = e.clientY - position.y;
+  let clientX = e instanceof MouseEvent ? e.clientX : e.touches[0]?.clientX ?? 0;
+  let clientY = e instanceof MouseEvent ? e.clientY : e.touches[0]?.clientY ?? 0;
+
+  offset.x = clientX - position.x;
+  offset.y = clientY - position.y;
+
   window.addEventListener("mousemove", onDrag);
   window.addEventListener("mouseup", stopDrag);
+  window.addEventListener("touchmove", onDrag, { passive: false });
+  window.addEventListener("touchend", stopDrag);
 }
+
 function stopDrag() {
   isDragging.value = false;
   window.removeEventListener("mousemove", onDrag);
   window.removeEventListener("mouseup", stopDrag);
+  window.removeEventListener("touchmove", onDrag);
+  window.removeEventListener("touchend", stopDrag);
 }
-function onDrag(e: MouseEvent) {
-  if (!isDragging.value || !modalRef.value) return;
 
-  let newX = e.clientX - offset.x;
-  let newY = e.clientY - offset.y;
+function onDrag(e: MouseEvent | TouchEvent) {
+  if (!isDragging.value || !modalRef.value) return;
+  if (e instanceof TouchEvent) e.preventDefault(); // prevent scrolling while dragging
+
+  let clientX = e instanceof MouseEvent ? e.clientX : e.touches[0]?.clientX ?? 0;
+  let clientY = e instanceof MouseEvent ? e.clientY : e.touches[0]?.clientY ?? 0;
+
+  let newX = clientX - offset.x;
+  let newY = clientY - offset.y;
 
   const minX = 0;
   const minY = 0;
@@ -35,10 +50,13 @@ function onDrag(e: MouseEvent) {
   position.x = Math.max(minX, Math.min(newX, maxX));
   position.y = Math.max(minY, Math.min(newY, maxY));
 }
+
 onUnmounted(() => stopDrag());
 onMounted(() => {
-  position.x = Math.round(window.innerWidth / 2 - modalRef.value.offsetWidth / 2);
-  position.y = Math.round(window.innerHeight / 2 - modalRef.value.offsetHeight / 2);
+  if (modalRef.value) {
+    position.x = Math.round(window.innerWidth / 2 - modalRef.value.offsetWidth / 2);
+    position.y = Math.round(window.innerHeight / 2 - modalRef.value.offsetHeight / 2);
+  }
 });
 
 const props = defineProps<{
@@ -51,6 +69,9 @@ function accept() {
   voiceStore.handleJoin(props.chatID);
   emit("close");
 }
+function reject() {
+  emit("close");
+}
 </script>
 
 <template>
@@ -59,53 +80,74 @@ function accept() {
     :style="{ top: position.y + 'px', left: position.x + 'px', cursor: isDragging ? 'grabbing' : 'grab' }"
     class="callModal"
     @mousedown.self="startDrag"
+    @touchstart.self="startDrag"
   >
     <div class="modal-header">Входящий звонок</div>
     <userAvatar class="avatar" type="voice" :speak="false" :img-url="avatar" :user-name="chatName" />
-    {{ chatName }}
+    <div class="username">{{ chatName }}</div>
     <div class="button">
       <button @click="accept" class="accept"><iconCall /></button>
-      <button class=""><iconCallReject /></button>
+      <button @click="reject" class="reject"><iconCallReject /></button>
     </div>
   </div>
 </template>
 
 <style scoped>
 .callModal {
-  width: clamp(200px, 15dvw, 250px);
+  width: 250px;
   background-color: var(--с-DeepBlueBlack-darker);
   border-radius: 10px;
   position: absolute;
-  box-shadow: 0px 0px 5px 0px rgba(255, 255, 255, 0.14);
-  padding: 30px 10px;
+  box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.5);
+  padding: 30px 15px;
   display: flex;
   align-items: center;
   flex-direction: column;
+  z-index: 1050;
+  user-select: none;
+}
+.modal-header {
+  font-weight: bold;
+  color: white;
+  margin-bottom: 10px;
+}
+.username {
+  font-weight: 600;
+  color: white;
+  text-align: center;
+  word-break: break-word;
 }
 .avatar {
-  width: 35%;
-  margin: 20px 0px;
+  width: 80px;
+  height: 80px;
+  margin: 15px 0px;
 }
 .button {
   display: flex;
-  margin-top: 30px;
+  margin-top: 25px;
   justify-content: space-around;
   width: 100%;
 }
 .button button {
   background-color: var(--c-CTA_red);
-  width: 25%;
-  aspect-ratio: 1/1;
-  border-radius: 300px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s, opacity 0.2s;
+}
+.button button:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
 }
 .button button.accept {
   background-color: var(--c-TurquoiseBlue-darker);
 }
 .button button svg {
-  width: 50%;
+  width: 24px;
+  height: auto;
 }
 </style>

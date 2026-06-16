@@ -116,7 +116,9 @@ async function handleChangePassword() {
 
 <style scoped>
 .user-settings-content {
-  width: 400px;
+  width: 100%;
+  max-width: 400px;
+  min-width: 250px;
   display: flex;
   flex-direction: column;
   gap: 20px;

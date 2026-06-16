@@ -47,18 +47,28 @@ defineProps<{
   align-items: center;
   gap: 10px;
   flex: 1;
+  min-width: 0;
 }
 .userInfo {
   container-type: inline-size;
   flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
 }
 .username {
   font-weight: 600;
   font-size: clamp(12px, 1.3cqw, 15px);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .login {
   font-weight: 600;
   font-size: clamp(10px, 1cqw, 13px);
   color: rgba(255, 255, 255, 45%);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 </style>

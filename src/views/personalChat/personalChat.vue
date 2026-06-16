@@ -94,4 +94,11 @@ onMounted(async () => {
 .personalChatooter {
   padding: 10px 15px;
 }
+
+@media (max-width: 767px) {
+  .personalChatooter {
+    padding: 10px;
+    padding-bottom: max(10px, env(safe-area-inset-bottom));
+  }
+}
 </style>

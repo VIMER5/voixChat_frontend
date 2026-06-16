@@ -20,33 +20,54 @@ const voiceInfo = computed(() => voiceStor.currentVoice(props.chatID));
 const newHeight = computed(() => resizable.panelHeight.value);
 
 const attachTrack = (track: any, participant: Participant) => {
-  if (track.kind !== Track.Kind.Video) return;
-  
-  // Проверяем, не добавлен ли уже этот трек
-  if (remoteVideosContainer.value?.querySelector(`[data-track="${track.sid}"]`)) {
-    return;
-  }
+  if (track.kind === Track.Kind.Video) {
+    if (remoteVideosContainer.value?.querySelector(`[data-track="${track.sid}"]`)) {
+      return;
+    }
 
-  const element = track.attach();
-  element.setAttribute("data-participant", participant.identity);
-  element.setAttribute("data-track", track.sid || "local-" + track.kind);
-  element.className = "video-track";
-  
-  // Для демки можно добавить особый класс или стиль
-  if (track.source === Track.Source.ScreenShare) {
-    element.classList.add("screen-share-track");
+    const element = track.attach();
+    element.setAttribute("data-participant", participant.identity);
+    element.setAttribute("data-track", track.sid || "local-" + track.kind);
+    element.className = "video-track";
+    
+    if (track.source === Track.Source.ScreenShare) {
+      element.classList.add("screen-share-track");
+    }
+    
+    remoteVideosContainer.value?.appendChild(element);
+  } else if (track.kind === Track.Kind.Audio) {
+    // Не прикрепляем локальные аудио треки (чтобы не слышать себя)
+    if (participant.identity === voiceStor.room?.localParticipant.identity) {
+      return;
+    }
+    
+    if (remoteVideosContainer.value?.querySelector(`audio[data-track="${track.sid}"]`)) return;
+    
+    const element = track.attach();
+    element.setAttribute("data-participant", participant.identity);
+    element.setAttribute("data-track", track.sid || "local-" + track.kind);
+    element.style.display = "none";
+    remoteVideosContainer.value?.appendChild(element);
+    
+    // Explicitly call play to ensure audio playback isn't suspended
+    element.play().catch((e: any) => console.error("Audio play failed:", e));
   }
-  
-  remoteVideosContainer.value?.appendChild(element);
 };
 
 const detachTrack = (track: any) => {
-  if (track.kind !== Track.Kind.Video) return;
-  const elements = remoteVideosContainer.value?.querySelectorAll(`[data-track="${track.sid || "local-" + track.kind}"]`);
-  elements?.forEach((el) => {
-    track.detach(el);
-    el.remove();
-  });
+  if (track.kind === Track.Kind.Video) {
+    const elements = remoteVideosContainer.value?.querySelectorAll(`[data-track="${track.sid || "local-" + track.kind}"]`);
+    elements?.forEach((el) => {
+      track.detach(el);
+      el.remove();
+    });
+  } else if (track.kind === Track.Kind.Audio) {
+    const elements = remoteVideosContainer.value?.querySelectorAll(`audio[data-track="${track.sid || "local-" + track.kind}"]`);
+    elements?.forEach((el) => {
+      track.detach(el);
+      el.remove();
+    });
+  }
 };
 
 const onTrackSubscribed = (track: any, publication: any, participant: any) => {
@@ -84,9 +105,19 @@ const setupRoomListeners = (room: Room) => {
         attachTrack(publication.track, participant);
       }
     });
+    participant.audioTrackPublications.forEach((publication) => {
+      if (publication.track && publication.isSubscribed) {
+        attachTrack(publication.track, participant);
+      }
+    });
   });
   
   room.localParticipant.videoTrackPublications.forEach((publication) => {
+    if (publication.track) {
+      attachTrack(publication.track, room.localParticipant);
+    }
+  });
+  room.localParticipant.audioTrackPublications.forEach((publication) => {
     if (publication.track) {
       attachTrack(publication.track, room.localParticipant);
     }
@@ -157,7 +188,6 @@ onUnmounted(() => {
       <slot></slot>
     </div>
     <div class="remote-videos" ref="remoteVideosContainer">
-      <!-- Видео будут добавляться сюда динамически -->
     </div>
     <div class="voice__channel__management">
       <defaultButton
@@ -226,7 +256,11 @@ onUnmounted(() => {
   flex-direction: column;
   padding-block: 15px;
   align-items: center;
-  container-type: size;
+}
+@media (min-width: 768px) {
+  .voicePanel {
+    container-type: size;
+  }
 }
 
 .voicePanel-content {
@@ -236,6 +270,7 @@ onUnmounted(() => {
   align-items: center;
   flex-direction: column;
   justify-content: center;
+  width: 100%;
 }
 
 .resize-handle {
@@ -249,21 +284,34 @@ onUnmounted(() => {
 }
 
 .voice__channel__management {
+  margin-top: auto;
+  padding-top: 10px;
 }
 .join__voice-button {
   padding: 8px 12px 8px 12px !important;
 }
 .userAvatarVoicePanel {
-  width: 31cqh;
-  max-width: 95px;
+  width: 60px;
+  height: 60px;
+}
+@media (min-width: 768px) {
+  .userAvatarVoicePanel {
+    width: 31cqh;
+    max-width: 95px;
+    height: auto;
+  }
 }
 .users-ul {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 10px;
+  padding: 0 10px;
 }
 .voice__channel__management__buttons {
   display: flex;
+  gap: 5px;
 }
 .voice__channel__management__buttons button {
   height: 35px;
@@ -283,19 +331,22 @@ onUnmounted(() => {
   justify-content: center;
   padding: 10px;
   width: 100%;
+  overflow-y: auto;
 }
 
 :deep(.video-track) {
-  width: 240px;
-  height: 180px;
+  width: 100%;
+  max-width: 240px;
+  aspect-ratio: 4/3;
   background-color: black;
   border-radius: 8px;
   object-fit: cover;
 }
 
 :deep(.screen-share-track) {
-  width: 480px;
-  height: 270px;
+  width: 100%;
+  max-width: 480px;
+  aspect-ratio: 16/9;
 }
 
 .management-btn {
@@ -307,6 +358,7 @@ onUnmounted(() => {
   border-radius: 8px;
   margin: 0 5px;
   transition: opacity 0.2s;
+  color: white;
 }
 
 .management-btn:hover {

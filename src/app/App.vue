@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from "vue-router";
+import { RouterLink, RouterView, useRoute } from "vue-router";
 import emailConfirmedModal from "@modalWindows/emailConfirmedModal.vue";
 import { useUsersInfo } from "./stores/usersInfo";
 import { watch, ref } from "vue";
@@ -12,7 +12,9 @@ import { useModalStore } from "./stores/modalStore";
 const userStore = useUsersInfo();
 const callModalStore = useCallModalStore();
 const modalStore = useModalStore();
+const route = useRoute();
 const openEmailConfirmedModal = ref<boolean>(false);
+
 watch(
   () => userStore.userInfoCurrent?.emailConfirmed,
   (isConfirmed) => {

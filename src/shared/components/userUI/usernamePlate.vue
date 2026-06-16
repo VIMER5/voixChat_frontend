@@ -20,21 +20,21 @@ defineProps<{
 </script>
 
 <template>
-  <div class="p-0.75 h-15.5 bg-DeepBlueBlack-darker flex items-center rounded-[5px] px-2.5 py-3.5 justify-between">
-    <div class="flex gap-2.5 h-full items-center">
+  <div class="p-0.75 h-15.5 bg-DeepBlueBlack-darker flex items-center rounded-[5px] px-2.5 py-3.5 justify-between min-w-0">
+    <div class="flex gap-2.5 h-full items-center min-w-0 flex-1">
       <userAvatar
         type="default"
         :img-url="`${urlUserAvatar}/thumb`"
         :user-name="userName"
         :status="status"
-        class="h-full"
+        class="h-full flex-shrink-0"
       />
-      <div class="userInfo flex flex-col">
-        <span class="text-[0.875rem]/[1.2] text-white">{{ userName }}</span>
-        <span class="text-[0.6875rem]/none text-icons-c">{{ userStatus }}</span>
+      <div class="userInfo flex flex-col min-w-0">
+        <span class="text-[0.875rem]/[1.2] text-white truncate select-all">{{ userName }}</span>
+        <span class="text-[0.6875rem]/none text-icons-c truncate">{{ userStatus }}</span>
       </div>
     </div>
-    <div class="items-center gap-3.25 flex h-full">
+    <div class="items-center gap-3.25 flex h-full flex-shrink-0">
       <buttonIcons
         :class="{ dis: voiceStore.roomState != 'connected' }"
         :cursor="voiceStore.roomState != 'connected' ? 'not-allowed' : 'pointer'"
@@ -43,7 +43,6 @@ defineProps<{
       >
         <iconMute :isMuted="!voiceStore.isMicOn" />
       </buttonIcons>
-      <buttonIcons class="h-[70%]"><iconDeafen /></buttonIcons>
       <buttonIcons @click="modalStore.openUserSettings" class="h-[70%]"><iconSettings /></buttonIcons>
     </div>
   </div>

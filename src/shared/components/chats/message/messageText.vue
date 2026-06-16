@@ -66,12 +66,14 @@ defineProps<{
   display: flex;
   flex-direction: column;
   gap: 7px;
+  min-width: 0;
 }
 .msgInfo {
   display: flex;
   gap: 5px;
   align-items: flex-end;
   font-weight: 600;
+  flex-wrap: wrap;
   > .date {
     color: var(--c-SpaceAsh_45);
     font-size: 1cqw;
@@ -89,5 +91,6 @@ defineProps<{
   color: #e9e9e9;
   font-size: clamp(12px, 1.2cqw, 20px);
   white-space: pre-wrap;
+  word-break: break-word;
 }
 </style>
